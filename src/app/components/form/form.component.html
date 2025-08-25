@@ -1,0 +1,16 @@
+<form [formGroup]="profileForm">
+  <ion-list>
+    <ion-item>
+      <ion-input label="Default input" (ionInput)="changeInput($event)" formControlName="firstName"></ion-input>
+    </ion-item>
+  
+    @if (profileForm.get('firstName')?.value === 'pepe') {
+      <ion-item>
+        <ion-input  label="Input with placeholder" placeholder="Enter company name" formControlName="lastName"></ion-input>
+      </ion-item>
+    } 
+
+
+    <ion-button (click)="enviarEvento()">Default</ion-button> 
+  </ion-list>
+</form>
