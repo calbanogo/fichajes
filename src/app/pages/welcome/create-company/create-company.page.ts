@@ -7,6 +7,7 @@ import {
   IonButton, IonInput, IonTextarea
 } from '@ionic/angular/standalone';
 import { CompanyService } from 'src/app/services/company';
+import { Auth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-create-company',
@@ -23,7 +24,11 @@ import { CompanyService } from 'src/app/services/company';
 export class CreateCompanyPage implements OnInit {
   createCompanyForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private companyService: CompanyService) {}
+  constructor(
+    private fb: FormBuilder, 
+    private companyService: CompanyService,
+    private auth: Auth
+  ) {}
 
   ngOnInit() {
     this.createCompanyForm = this.fb.group({
@@ -35,7 +40,14 @@ export class CreateCompanyPage implements OnInit {
 
   async onSubmit() {
     if (this.createCompanyForm.valid) {
-      await this.companyService.addCompany(this.createCompanyForm.value);
+      const user = this.auth.currentUser;
+       if (user) {
+        const userId = user.uid; // Obtén el UID del usuario
+        await this.companyService.addCompany(this.createCompanyForm.value, userId); // Pasa el UID al servicio
+        console.log('Formulario enviado:', this.createCompanyForm.value);
+      } else {
+        console.error('No hay un usuario autenticado');
+      }
       console.log('Formulario enviado:', this.createCompanyForm.value);
     }
   }
