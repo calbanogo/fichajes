@@ -2,23 +2,25 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { 
-  IonContent, IonHeader, IonTitle, IonToolbar, 
-  IonButtons, IonBackButton, IonItem, IonLabel, 
-  IonButton, IonInput, IonTextarea, IonFooter } from '@ionic/angular/standalone';
+  IonContent, IonToolbar, IonInput,
+  IonButtons, IonBackButton, IonItem,  
+  IonTextarea,  IonList } from '@ionic/angular/standalone';
+
 import { CompanyService } from 'src/app/services/company';
 import { Auth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { CustomHeaderComponent } from "src/app/components/custom-header/custom-header.component";
+import { CustomFooterButtonComponent } from "src/app/components/custom-footer-button/custom-footer-button.component";
 
 @Component({
   selector: 'app-create-company',
   templateUrl: './create-company.page.html',
   styleUrls: ['./create-company.page.scss'],
   standalone: true,
-  imports: [IonFooter, 
-    IonContent, IonHeader, IonTitle, IonToolbar, 
-    CommonModule, ReactiveFormsModule,  FormsModule, 
-    IonButtons, IonBackButton, IonItem, IonLabel, 
-    IonButton, IonInput, IonTextarea
+  imports: [
+    IonList, IonContent, IonToolbar, CommonModule, ReactiveFormsModule,
+    FormsModule, IonButtons, IonBackButton, IonItem, IonTextarea, 
+    CustomHeaderComponent, CustomFooterButtonComponent, IonInput
   ]
 })
 export class CreateCompanyPage implements OnInit {

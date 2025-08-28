@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { AuthService } from 'src/app/services/auth';
-import { IonContent, IonText, IonToolbar, IonButton, IonFooter, IonList, IonCard, IonCardTitle, IonCardHeader, IonCardContent } from "@ionic/angular/standalone";
+import { IonContent, IonText, IonList, IonCard, IonCardTitle, IonCardHeader, IonCardContent, IonHeader } from "@ionic/angular/standalone";
 import { Router } from '@angular/router';
 import { CustomHeaderComponent } from "src/app/components/custom-header/custom-header.component";
 import { CommonModule } from '@angular/common';
 import { Company } from 'src/app/interfaces/companiesList';
+import { CustomFooterButtonComponent } from "src/app/components/custom-footer-button/custom-footer-button.component";
 
 
 @Component({
@@ -13,9 +14,13 @@ import { Company } from 'src/app/interfaces/companiesList';
   templateUrl: './welcome.page.html',
   styleUrls: ['./welcome.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonCardContent, IonCardHeader, IonCardTitle, IonCard, IonList, IonFooter, IonContent, IonText, IonButton, CustomHeaderComponent, IonToolbar],
+  imports: [
+    CommonModule, IonCardContent, IonCardHeader, IonCardTitle, 
+    IonCard, IonList, IonContent, IonText, CustomHeaderComponent, 
+    IonHeader, CustomFooterButtonComponent
+  ],
 })
-export class WelcomePage  {
+export class WelcomePage {
   userData: any = null;
   noCompanyMessage!: string | null;
   companyList!: Company[]; // Lista de empresas del usuario
@@ -24,15 +29,15 @@ export class WelcomePage  {
     private auth: Auth,
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
   async ionViewWillEnter() {
     console.log('ionViewWillEnter triggered');
     const user = this.auth.currentUser;
-    this.noCompanyMessage = null; 
+    this.noCompanyMessage = null;
     if (user) {
-    this.userData = await this.authService.getUserData(user.uid);
-    console.log('User data:', this.userData);
+      this.userData = await this.authService.getUserData(user.uid);
+      console.log('User data:', this.userData);
       if (this.userData && (!this.userData.companies || this.userData.companies.length === 0)) {
         // Verifica si companyId no existe o si el array está vacío
         this.noCompanyMessage = 'No tiene todavía empresa creada';
@@ -41,7 +46,7 @@ export class WelcomePage  {
         this.companyList = this.userData.companies || [];
         console.log('Company list:', this.companyList);
       }
-    } 
+    }
   }
 
   navigateTo(path: string) {

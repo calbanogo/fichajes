@@ -1,34 +1,35 @@
-<ion-content class="ion-padding">
+<ion-header class="ion-no-border">
   <app-custom-header [title]="'Empresas'" [subtitle]="'Crea o selecciona una empresa'">
-
   </app-custom-header>
+</ion-header>
 
+<ion-content color="light">
   @if (noCompanyMessage) {
   <div class="no-company-message">
     <ion-text color="danger">{{ noCompanyMessage }}</ion-text>
   </div>
   } @else {
-  <div>
-    <ion-list>
-      @for (item of companyList; track $index) {
-      <ion-card class="custom-card" (click)="navigateToCompany(item.companyId)">
-        <ion-card-header>
-          <ion-card-title>{{ item.companyName }}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <p>{{ item.description }}</p>
-        </ion-card-content>
-      </ion-card>
-      }
-    </ion-list>
-  </div>
+  <ion-list color="light">
+    @for (item of companyList; track $index) {
+    <ion-card class="custom-card" (click)="navigateToCompany(item.companyId)">
+      <ion-card-header>
+        <ion-card-title>{{ item.companyName }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        {{ item.description }}
+      </ion-card-content>
+    </ion-card>
+    }
+  </ion-list>
   }
-
 </ion-content>
-<ion-footer>
+<!-- <ion-footer class="ion-no-border">
   <ion-toolbar>
     <ion-button expand="block" color="primary" (click)="navigateTo('create-company')">
       Crear empresa
     </ion-button>
   </ion-toolbar>
-</ion-footer>
+</ion-footer> -->
+
+<app-custom-footer-button [buttonText]="'Crear empresa'" (actionClick)="navigateTo('create-company')">
+</app-custom-footer-button>

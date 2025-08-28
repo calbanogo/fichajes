@@ -1,6 +1,4 @@
-<ion-header>
-  <div class="header-custom">
-    <h1>{{ title }}</h1>
-    <h2>{{ subtitle}}</h2>
-  </div>
-</ion-header>
+<div [ngClass]="little ? 'header-custom-little' : 'header-custom'" >
+  <h1>{{ title }}</h1>
+  <h2>{{ subtitle }}</h2>
+</div>

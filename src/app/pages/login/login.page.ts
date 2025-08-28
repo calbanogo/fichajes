@@ -6,6 +6,7 @@ import {
   IonContent, IonButton, IonIcon, IonTitle,
   IonToolbar, IonHeader
 } from "@ionic/angular/standalone";
+import { CustomHeaderComponent } from "src/app/components/custom-header/custom-header.component";
 
 
 @Component({
@@ -14,8 +15,9 @@ import {
   styleUrls: ['./login.page.scss'],
   standalone: true,
   imports: [
-    ReactiveFormsModule, IonContent
-  ],
+    ReactiveFormsModule, IonContent,
+    CustomHeaderComponent
+],
 })
 export class LoginPage {
   loginForm: FormGroup;

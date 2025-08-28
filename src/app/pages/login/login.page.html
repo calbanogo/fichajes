@@ -1,8 +1,7 @@
-<ion-content fullscreen="true">
-  <div class="container">
-    <!-- Imagen SVG en la parte superior -->
-    <img src="assets/images/logo.png" alt="Logo" class="logo" />
 
+<ion-content fullscreen="true">
+  <app-custom-header [title]="'Control de Asistencia'" [subtitle]="'Gestiona tu asistencia fácilmente'"></app-custom-header>
+  <div class="container">    
     <!-- Botón de autenticación con Google -->
     <button class="google-button" (click)="loginWithGoogle()">
       <img src="assets/images/google-logo.png" alt="Google Logo" class="google-icon" />
