@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
 import { doc, Firestore, getDoc, setDoc } from '@angular/fire/firestore';
 
@@ -7,6 +7,7 @@ import { doc, Firestore, getDoc, setDoc } from '@angular/fire/firestore';
   providedIn: 'root',
 })
 export class AuthService {
+
   constructor(private auth: Auth, private firestore: Firestore) {}
 
   // Registro de usuario
@@ -75,7 +76,7 @@ export class AuthService {
 
   async getUserData(uid: string) {
   try {
-    const userRef = doc(this.firestore, `users/${uid}`);
+     const userRef = doc(this.firestore, 'users', uid);
     const userSnapshot = await getDoc(userRef);
 
     if (userSnapshot.exists()) {

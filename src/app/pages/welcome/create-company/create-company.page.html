@@ -20,15 +20,16 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Número de Horas</ion-label>
-      <ion-input formControlName="hours" type="number"></ion-input>
-    </ion-item>
-
-    <ion-item>
       <ion-label position="floating">Descripción</ion-label>
       <ion-textarea formControlName="description"></ion-textarea>
     </ion-item>
-
-    <ion-button expand="block" type="submit" [disabled]="createCompanyForm.invalid">Guardar</ion-button>
   </form>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button [disabled]="createCompanyForm.invalid" expand="block" color="primary" (click)="onSubmit()">
+      Guardar
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

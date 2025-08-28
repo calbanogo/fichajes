@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Ocupa toda la altura de la pantalla */
+  background-color: #FAF6F0;
+}
+
+.logo {
+  width: 150px; /* Ajusta el tamaño de la imagen */
+  margin-bottom: 20px; /* Espaciado entre la imagen y el botón */
+}
+
+.google-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff; /* Fondo blanco */
+  border: 1px solid #dcdcdc; /* Borde gris claro */
+  border-radius: 4px; /* Bordes redondeados */
+  padding: 10px 20px; /* Espaciado interno */
+  font-size: 16px; /* Tamaño de fuente */
+  font-weight: 500; /* Peso de la fuente */
+  color: #757575; /* Color del texto */
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra */
+  transition: background-color 0.3s ease;
+  width: 100%; /* Ancho completo */
+  max-width: 300px; /* Ancho máximo */
+}
+
+.google-button:hover {
+  background-color: #f7f7f7; /* Fondo más claro al pasar el mouse */
+}
+
+.google-icon {
+  width: 20px; /* Tamaño del ícono */
+  height: 20px;
+  margin-right: 10px; /* Espaciado entre el ícono y el texto */
+}

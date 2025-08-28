@@ -8,6 +8,18 @@ import { environment } from './environments/environment';
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
+import { addIcons } from 'ionicons';
+import { calendarOutline, logoGoogle, peopleCircleOutline, settingsOutline } from 'ionicons/icons';
+import { setLogLevel, LogLevel } from '@angular/fire';
+
+setLogLevel(LogLevel.SILENT);
+
+addIcons({
+  'logo-google': logoGoogle,
+  'people-circle-outline': peopleCircleOutline,
+  'calendar-outline': calendarOutline,
+  'settings-outline': settingsOutline,
+});
 
 bootstrapApplication(AppComponent, {
   providers: [

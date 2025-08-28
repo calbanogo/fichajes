@@ -5,6 +5,8 @@ import { Firestore, collection, addDoc, getDocs, doc, updateDoc, arrayUnion } fr
   providedIn: 'root',
 })
 export class CompanyService {
+
+  
   private companyCollection;
 
   constructor(private firestore: Firestore) {
@@ -16,7 +18,12 @@ export class CompanyService {
       const docRef = await addDoc(this.companyCollection, company);
       const userRef = doc(this.firestore, `users/${userId}`);
       await updateDoc(userRef, { 
-        companyId:  arrayUnion(docRef.id)
+        companies:  arrayUnion(
+          {
+            companyId: docRef.id, 
+            companyName: company.companyName, 
+            description: company.description
+          }),
       }
       );
       console.log('Empresa añadida con ID:', docRef.id);

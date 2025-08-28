@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-
-import { IonicModule } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth';
+import { 
+  IonContent, IonButton, IonIcon, IonTitle,
+  IonToolbar, IonHeader
+} from "@ionic/angular/standalone";
 
 
 @Component({
@@ -11,7 +13,9 @@ import { AuthService } from 'src/app/services/auth';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [ReactiveFormsModule, IonicModule],
+  imports: [
+    ReactiveFormsModule, IonContent
+  ],
 })
 export class LoginPage {
   loginForm: FormGroup;
