@@ -1,0 +1,16 @@
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/welcome"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+<ion-content [fullscreen]="true">
+    <app-custom-header [little]="true" [title]="'Trabajadores'" >
+    </app-custom-header>
+
+    <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+        <ion-fab-button (click)="addEmployee()">
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+</ion-content>

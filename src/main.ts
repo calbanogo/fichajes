@@ -9,7 +9,7 @@ import { environment } from './environments/environment';
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { addIcons } from 'ionicons';
-import { calendarOutline, logoGoogle, peopleCircleOutline, settingsOutline } from 'ionicons/icons';
+import { add, barChartOutline, calendarOutline, logoGoogle, peopleCircleOutline, settingsOutline } from 'ionicons/icons';
 import { setLogLevel, LogLevel } from '@angular/fire';
 
 setLogLevel(LogLevel.SILENT);
@@ -19,6 +19,8 @@ addIcons({
   'people-circle-outline': peopleCircleOutline,
   'calendar-outline': calendarOutline,
   'settings-outline': settingsOutline,
+  'add': add,
+  'bar-chart-outline': barChartOutline
 });
 
 bootstrapApplication(AppComponent, {
