@@ -2,15 +2,41 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/welcome"></ion-back-button>
     </ion-buttons>
+    <ion-title>
+      <app-custom-header [little]="true" [title]="'Trabajadores'" >
+      </app-custom-header>
+    </ion-title>
   </ion-toolbar>
 
 <ion-content [fullscreen]="true">
-    <app-custom-header [little]="true" [title]="'Trabajadores'" >
-    </app-custom-header>
+  <ion-list>
+    @for (employee of employees; track employee.id) {
+      <ion-item>
+        <ion-avatar slot="start">
+          <div class="avatar-circle">
+            {{ getInitials(employee.name, employee.surname) }}
+          </div>
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ employee.name }} {{ employee.surname }}</h2>
+        </ion-label>
 
-    <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-        <ion-fab-button (click)="addEmployee()">
-            <ion-icon name="add"></ion-icon>
-        </ion-fab-button>
-    </ion-fab>
-</ion-content>
+         <ion-button slot="end" fill="clear" (click)="presentEmployeeActions(employee)">
+          <ion-icon name="ellipsis-vertical"></ion-icon>
+      </ion-button>
+      </ion-item>
+    }
+  </ion-list>
+
+  @if (employees.length === 0) {
+    <ion-text color="medium" class="ion-padding">
+      No hay empleados registrados aún.
+    </ion-text>
+  }
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+      <ion-fab-button (click)="addEmployee()">
+          <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+  </ion-fab>
+
+</ion-content>      

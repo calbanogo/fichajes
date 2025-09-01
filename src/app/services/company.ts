@@ -1,19 +1,57 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc, getDocs, doc, updateDoc, arrayUnion } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, getDocs, doc, updateDoc, arrayUnion, getDoc, query, where } from '@angular/fire/firestore';
+import { BehaviorSubject } from 'rxjs';
+import { IonicStorageModule, Storage } from '@ionic/storage-angular';
+import { Company } from '../interfaces/companiesList';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CompanyService {
-
-  
+  private storage: Storage;
+  private storageReady = false;
+  private selectedCompanySubject = new BehaviorSubject<Company | null>(null);
   private companyCollection;
 
-  constructor(private firestore: Firestore) {
+  constructor(
+    private firestore: Firestore
+  ) {
+    this.storage = new Storage();
+    this.init();
     this.companyCollection = collection(this.firestore, 'companies');
   }
 
-  async addCompany(company: any, userId: string) {
+  private async init() {
+    await this.storage.create(); 
+    this.storageReady = true;
+
+    // cargar empresa previamente guardada
+     const saved = await this.storage.get('selectedCompany');
+     console.log('Loaded selected company from storage:', saved);
+    if (saved) {
+      this.selectedCompanySubject.next(saved);
+    }
+  }
+
+  async selectCompany(company: any) {
+    this.selectedCompanySubject.next(company);
+    if (this.storageReady) {
+      await this.storage.set('selectedCompany', company);
+    }
+  }
+
+  getSelectedCompany(): Company | null {
+    return this.selectedCompanySubject.value;
+  }
+
+  async clearSelectedCompany() {
+    this.selectedCompanySubject.next(null);
+    if (this.storageReady) {
+      await this.storage.remove('selectedCompany');
+    }
+  }
+
+  async addCompany(company: Company, userId: string) {
     try {
       const docRef = await addDoc(this.companyCollection, company);
       const userRef = doc(this.firestore, `users/${userId}`);

@@ -7,6 +7,7 @@ import { CustomHeaderComponent } from "src/app/components/custom-header/custom-h
 import { CommonModule } from '@angular/common';
 import { Company } from 'src/app/interfaces/companiesList';
 import { CustomFooterButtonComponent } from "src/app/components/custom-footer-button/custom-footer-button.component";
+import { CompanyService } from 'src/app/services/company';
 
 
 @Component({
@@ -28,7 +29,8 @@ export class WelcomePage {
   constructor(
     private auth: Auth,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private companyService: CompanyService
   ) { }
 
   async ionViewWillEnter() {
@@ -58,6 +60,7 @@ export class WelcomePage {
     console.log(`Navigating to company with ID: ${companyId}`);
     // Aquí puedes implementar la lógica para navegar a la página de detalles de la empresa
     // Por ejemplo:
-    this.router.navigate([`/company/tab1`], { queryParams: { companyId } });
+    this.companyService.selectCompany(this.companyList.find(c => c.companyId === companyId)!);
+    this.router.navigate([`/company/tab0`]);
   }
 }

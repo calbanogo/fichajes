@@ -9,7 +9,7 @@ import { environment } from './environments/environment';
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { addIcons } from 'ionicons';
-import { add, barChartOutline, calendarOutline, logoGoogle, peopleCircleOutline, settingsOutline } from 'ionicons/icons';
+import { add, arrowBack, barChartOutline, calendarOutline, closeOutline, createOutline, ellipsisVertical, logoGoogle, peopleCircleOutline, settingsOutline, trashOutline } from 'ionicons/icons';
 import { setLogLevel, LogLevel } from '@angular/fire';
 
 setLogLevel(LogLevel.SILENT);
@@ -20,7 +20,12 @@ addIcons({
   'calendar-outline': calendarOutline,
   'settings-outline': settingsOutline,
   'add': add,
-  'bar-chart-outline': barChartOutline
+  'close-outline': closeOutline,
+  'bar-chart-outline': barChartOutline,
+  'arrow-back': arrowBack,
+  'ellipsis-vertical': ellipsisVertical,
+  'create-outline': createOutline,
+  'trash-outline': trashOutline,
 });
 
 bootstrapApplication(AppComponent, {
@@ -31,5 +36,9 @@ bootstrapApplication(AppComponent, {
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     provideAuth(() => getAuth()),
+    {
+    provide: Storage,
+    useFactory: () => new Storage(),
+  }
   ],
 });

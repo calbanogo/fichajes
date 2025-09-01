@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
 
-export const routes: Routes = [
+export const tabRoutes: Routes = [
   {
     path: '', 
     component: TabsPage,
@@ -9,6 +9,7 @@ export const routes: Routes = [
       {
         path: 'tab0',
         loadComponent: () =>
+          
           import('../tab0/tab0.page').then((m) => m.Tab0Page),
       },
       {
@@ -28,14 +29,15 @@ export const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'tab1', 
+        redirectTo: 'tab0', 
         pathMatch: 'full',
       },
     ],
   },
+  // 👇 Ruta paralela fuera del children
   {
-    path: '',
-    redirectTo: '/company/tab1',
-    pathMatch: 'full',
-  },
+    path: 'tab1/create-employee',
+    loadComponent: () =>
+      import('../tab1/create-employee/create-employee.page').then(m => m.CreateEmployeePage),
+  }
 ];

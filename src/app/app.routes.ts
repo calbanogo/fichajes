@@ -18,6 +18,7 @@ export const routes: Routes = [
   },
   {
     path: 'company',
-    loadChildren: () => import('./pages/company/tabs/tabs.routes').then((m) => m.routes),
+    loadChildren: () => import('./pages/company/tabs/tabs.routes').then((m) => m.tabRoutes),
+    canActivate: [AuthGuard],
   }
 ];

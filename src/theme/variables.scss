@@ -18,16 +18,26 @@ ion-list {
 }
 
 ion-card {
-//   background-color: #F5F5F5;
+  //   background-color: #F5F5F5;
   border-radius: 12px;
   padding: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  --background: #F5F5F5; /* Fondo blanco fijo */
+  --background: #F5F5F5;
+  /* Fondo blanco fijo */
   color: var(--ion-text-color);
-
 }
-  ion-card-content {
-      --background: #F5F5F5; /* Fondo blanco fijo */
-  }
 
+ion-card-content {
+  --background: #F5F5F5;
+  /* Fondo blanco fijo */
+}
 
+ion-title, ion-back-button {
+  font-weight: 600;
+  color: var(--ion-text-color);
+}
+
+ion-fab[slot="end"] {
+  --margin-top: 0;
+  --margin-bottom: 0;
+}

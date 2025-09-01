@@ -28,6 +28,7 @@ log.txt
 /tmp
 /out-tsc
 /bazel-out
+src/environmments/*
 
 # Node
 /node_modules
