@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
 import { AuthService } from 'src/app/services/auth';
 import { IonContent, IonText, IonList, IonCard, IonCardTitle, IonCardHeader, IonCardContent, IonHeader } from "@ionic/angular/standalone";
 import { Router } from '@angular/router';
@@ -8,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { Company } from 'src/app/interfaces/companiesList';
 import { CustomFooterButtonComponent } from "src/app/components/custom-footer-button/custom-footer-button.component";
 import { CompanyService } from 'src/app/services/company';
-
+import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 
 @Component({
   selector: 'app-welcome',
@@ -27,28 +26,32 @@ export class WelcomePage {
   companyList!: Company[]; // Lista de empresas del usuario
 
   constructor(
-    private auth: Auth,
     private authService: AuthService,
     private router: Router,
     private companyService: CompanyService
   ) { }
 
   async ionViewWillEnter() {
-    console.log('ionViewWillEnter triggered');
-    const user = this.auth.currentUser;
-    this.noCompanyMessage = null;
-    if (user) {
-      this.userData = await this.authService.getUserData(user.uid);
-      console.log('User data:', this.userData);
-      if (this.userData && (!this.userData.companies || this.userData.companies.length === 0)) {
-        // Verifica si companyId no existe o si el array está vacío
-        this.noCompanyMessage = 'No tiene todavía empresa creada';
-      } else {
-        // Aquí podrías cargar la lista de empresas si es necesario
-        this.companyList = this.userData.companies || [];
-        console.log('Company list:', this.companyList);
+    try {
+      console.log('ionViewWillEnter triggered');
+      const user = await FirebaseAuthentication.getCurrentUser();
+      this.noCompanyMessage = null;
+      if (user.user?.uid) {
+        this.userData = await this.authService.getUserData(user.user.uid);
+        console.log('User data:', this.userData);
+        if (this.userData && (!this.userData.companies || this.userData.companies.length === 0)) {
+          // Verifica si companyId no existe o si el array está vacío
+          this.noCompanyMessage = 'No tiene todavía empresa creada';
+        } else {
+          // Aquí podrías cargar la lista de empresas si es necesario
+          this.companyList = this.userData.companies || [];
+          console.log('Company list:', this.companyList);
+        }
       }
+    } catch (error) {
+      this.noCompanyMessage = 'Error al cargar las empresas del usuario';
     }
+   
   }
 
   navigateTo(path: string) {

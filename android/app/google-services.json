@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "852527044815",
+    "project_id": "fichajesapp-bb1d7",
+    "storage_bucket": "fichajesapp-bb1d7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:852527044815:android:e168117ae33022b7e5bfba",
+        "android_client_info": {
+          "package_name": "com.fichajes.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "852527044815-ndcmt302du83f92o4dfff17is5nf1gf7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPF9zIrhoEomdBmeSg2cUGUKVyOtOM6No"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "852527044815-ndcmt302du83f92o4dfff17is5nf1gf7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

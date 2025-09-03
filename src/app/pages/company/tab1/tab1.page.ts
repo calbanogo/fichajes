@@ -6,12 +6,18 @@ import { CompanyService } from 'src/app/services/company';
 import { EmployeeService } from 'src/app/services/employee';
 import { ActionSheetController } from '@ionic/angular';
 import { UtilsService } from 'src/app/services/utils-service';
+import { ActionSheet, ActionSheetButtonStyle } from '@capacitor/action-sheet';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss'],
-  imports: [IonButton, IonAvatar, IonText, IonLabel, IonItem, IonList, IonTitle, IonIcon, IonFabButton, IonFab, IonBackButton, IonButtons, IonToolbar, IonContent, CustomHeaderComponent],
+  imports: [
+    IonButton, IonAvatar, IonText, IonLabel, IonItem, IonList, 
+    IonTitle, IonIcon, IonFabButton, IonFab, IonBackButton, IonButtons, 
+    IonToolbar, IonContent, CustomHeaderComponent
+  ],
 })
 export class Tab1Page implements OnInit {
 
@@ -26,8 +32,8 @@ export class Tab1Page implements OnInit {
     private route: ActivatedRoute,
     private companyService: CompanyService,
     private employeeService: EmployeeService,
-    private actionSheetController: ActionSheetController,
     private utilsService: UtilsService,
+    private actionSheetController: ActionSheetController
   ) {}
 
   ngOnInit(): void {
@@ -81,7 +87,10 @@ export class Tab1Page implements OnInit {
 
 
   async presentEmployeeActions(employee: any) {
-    const actionSheet = await this.actionSheetController.create({
+    console.log('Click detectado:', employee);
+    if (Capacitor.getPlatform() === 'web') {
+  // Mostrar un dialog de Angular/Ionic
+   const actionSheet = await this.actionSheetController.create({
       header: `${employee.name} ${employee.surname}`,
       buttons: [
         {
@@ -108,5 +117,31 @@ export class Tab1Page implements OnInit {
     });
 
     await actionSheet.present();
+    } else {
+          const actionSheet = await ActionSheet.showActions({
+      title: `${employee.name} ${employee.surname}`,  
+      options: [
+        {
+          title: 'Editar',
+          style: ActionSheetButtonStyle.Default,
+        },
+        {
+          title: 'Eliminar',
+          style:  ActionSheetButtonStyle.Destructive,
+        },
+        {
+          title: 'Cancelar',
+          style: ActionSheetButtonStyle.Cancel
+        }
+      ]
+    });
+     
+    if (actionSheet.index === 0) {
+      this.editEmployee(employee);
+    } else if (actionSheet.index === 1) {
+      this.deleteEmployee(employee);
+    }
+    }
+
   }
 }

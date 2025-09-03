@@ -1,13 +1,15 @@
-<ion-content [fullscreen]="true" color="light">
-
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/welcome"></ion-back-button>
     </ion-buttons>
+    <ion-title>
+      <app-custom-header [little]="true" [title]="'Crear Empresa'">
+      </app-custom-header>
+    </ion-title>
 
   </ion-toolbar>
-  <app-custom-header [little]="true" [title]="'Crear Empresa'">
-  </app-custom-header>
+
+<ion-content [fullscreen]="true" color="light">
 
   <form [formGroup]="createCompanyForm" >
     <ion-list [inset]="true">
@@ -17,12 +19,40 @@
       </ion-item>
 
       <ion-item>
-        <!-- <ion-label position="floating">Descripción</ion-label> -->
-        <ion-textarea label="Comentario" labelPlacement="floating" rows="5" formControlName="description"></ion-textarea>
+        <ion-textarea label="Comentario" labelPlacement="floating" rows="2" formControlName="description"></ion-textarea>
       </ion-item>
     </ion-list>
-
   </form>
+  <form [formGroup]="hoursForm">
+    <ion-list>
+      <div formArrayName="dias">
+        @for (grupo of dias.controls; track $index; let i = $index) {
+          <div [formGroup]="getGrupo(i)">
+            <ion-item lines="full" class="horario-item">
+              <div class="horario-grid"></div>
+                <ion-label class="dia-label">{{ getGrupo(i).value.nombre }}</ion-label>
+                <input
+                  formControlName="horaInicio"
+                  [ngxTimepicker]="InicioPicker"
+                  readonly
+                  class="time-input"
+                />
+                <ngx-material-timepicker #InicioPicker></ngx-material-timepicker>
+                <input
+                  formControlName="horaFin"
+                  [ngxTimepicker]="finPicker"
+                  readonly
+                  class="time-input"
+                />
+                <ngx-material-timepicker #finPicker></ngx-material-timepicker>
+
+                <ion-toggle formControlName="activo"></ion-toggle>
+              </ion-item>
+          </div>
+        }
+      </div>
+    </ion-list>
+</form>
 </ion-content>
 
 <app-custom-footer-button [disabled]="createCompanyForm.invalid" [buttonText]="'Guardar'" (actionClick)="onSubmit()">

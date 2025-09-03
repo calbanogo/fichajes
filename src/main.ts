@@ -11,6 +11,7 @@ import { AppComponent } from './app/app.component';
 import { addIcons } from 'ionicons';
 import { add, arrowBack, barChartOutline, calendarOutline, closeOutline, createOutline, ellipsisVertical, logoGoogle, peopleCircleOutline, settingsOutline, trashOutline } from 'ionicons/icons';
 import { setLogLevel, LogLevel } from '@angular/fire';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 setLogLevel(LogLevel.SILENT);
 
@@ -30,8 +31,11 @@ addIcons({
 
 bootstrapApplication(AppComponent, {
   providers: [
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    provideIonicAngular(),
+    { 
+      provide: RouteReuseStrategy, useClass: IonicRouteStrategy 
+    },
+    provideAnimations(),
+    provideIonicAngular({mode: 'md'}),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),

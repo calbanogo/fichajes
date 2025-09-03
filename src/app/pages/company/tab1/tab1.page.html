@@ -11,7 +11,7 @@
 <ion-content [fullscreen]="true">
   <ion-list>
     @for (employee of employees; track employee.id) {
-      <ion-item>
+      <ion-item button="false">
         <ion-avatar slot="start">
           <div class="avatar-circle">
             {{ getInitials(employee.name, employee.surname) }}
@@ -21,9 +21,9 @@
           <h2>{{ employee.name }} {{ employee.surname }}</h2>
         </ion-label>
 
-         <ion-button slot="end" fill="clear" (click)="presentEmployeeActions(employee)">
+        <ion-button slot="end" fill="clear" (click)="presentEmployeeActions(employee)">
           <ion-icon name="ellipsis-vertical"></ion-icon>
-      </ion-button>
+        </ion-button>
       </ion-item>
     }
   </ion-list>

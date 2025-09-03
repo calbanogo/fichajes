@@ -1,25 +1,29 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { Auth, onAuthStateChanged } from '@angular/fire/auth';
+import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private auth: Auth, private router: Router) {}
+  constructor(private router: Router) {}
 
   async canActivate(): Promise<boolean> {
-    return new Promise((resolve) => {
-      onAuthStateChanged(this.auth, (user) => {
-        const isLoggedIn = localStorage.getItem('isLoggedIn');
+    try {
+      const user = await FirebaseAuthentication.getCurrentUser();
 
-        if (user && isLoggedIn === 'true') {
-          resolve(true); // Permite el acceso si el usuario está autenticado
-        } else {
-          this.router.navigate(['/login']); // Redirige al login si no está autenticado
-          resolve(false);
-        }
-      });
-    });
+      if (user?.user?.uid) {
+        console.log('Usuario autenticado:', user.user.uid);
+        return true; // Usuario autenticado
+      } else {
+        console.log('Usuario no autenticado');
+        this.router.navigate(['/login']); // Redirige si no está logueado
+        return false;
+      }
+    } catch (error) {
+      console.error('Error al verificar autenticación:', error);
+      this.router.navigate(['/login']);
+      return false;
+    }
   }
 }

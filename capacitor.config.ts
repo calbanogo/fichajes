@@ -1,9 +1,21 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'com.fichajes.app',
   appName: 'fichajesPersonal',
-  webDir: 'www'
+  webDir: 'www',
+  plugins: {
+    FirebaseAuthentication: {
+      providers: ['google.com'],
+      skipNativeAuth: false
+    },
+    SplashScreen: {
+      launchShowDuration: 0,
+      launchAutoHide: false,
+      backgroundColor: "#ffffffff",
+      showSpinner: true
+    },
+  }
 };
 
 export default config;

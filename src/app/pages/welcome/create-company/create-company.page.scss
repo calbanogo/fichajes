@@ -1,0 +1,33 @@
+.horario-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  --inner-padding-end: 12px;
+}
+
+.dia-label {
+  flex: 1;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.time-input {
+  max-width: 80px;
+  margin: 0;
+  font-size: 12px;
+  border: none;
+  background: transparent;
+  text-align: center;
+}
+
+ion-toggle {
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+.time-input:disabled {
+  color: #999;
+  opacity: 0.6;
+  cursor: not-allowed;
+}

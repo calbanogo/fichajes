@@ -7,6 +7,7 @@ import {
   IonToolbar, IonHeader
 } from "@ionic/angular/standalone";
 import { CustomHeaderComponent } from "src/app/components/custom-header/custom-header.component";
+import { UtilsService } from 'src/app/services/utils-service';
 
 
 @Component({
@@ -25,7 +26,8 @@ export class LoginPage {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router // Inyecta el servicio Router
+    private router: Router,
+    private utilsService: UtilsService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -36,10 +38,9 @@ export class LoginPage {
   async loginWithGoogle() {
     try {
       const user = await this.authService.loginWithGoogle();
-      if(user.uid) {
+      if(user?.uid) {
         this.router.navigate(['/welcome']);
       }
-
     } catch (error) {
       console.error('Error al iniciar sesión con Google:', error);
     }

@@ -1,6 +1,7 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
 import { doc, Firestore, getDoc, setDoc } from '@angular/fire/firestore';
+import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 
 
 @Injectable({
@@ -21,35 +22,21 @@ export class AuthService {
       throw error;
     }
   }
-
-  // Inicio de sesión
-  async login(email: string, password: string) {
-    try {
-      const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
-      console.log('Usuario autenticado:', userCredential.user);
-      return userCredential.user;
-    } catch (error) {
-      console.error('Error al iniciar sesión:', error);
-      throw error;
-    }
-  }
-
   // Inicio de sesión con Google
   async loginWithGoogle() {
     try {
-      const provider = new GoogleAuthProvider();
-      const userCredential = await signInWithPopup(this.auth, provider);
-      const user = userCredential.user;
+      const result = await FirebaseAuthentication.signInWithGoogle();
+      const user = result.user;
 
       localStorage.setItem('isLoggedIn', 'true');
       // Guarda los datos del usuario en Firestore
-      const userRef = doc(this.firestore, `users/${user.uid}`);
+      const userRef = doc(this.firestore, `users/${user?.uid}`);
       const userSnapshot = await getDoc(userRef);
       // console.log('User snapshot:', userSnapshot);
       if (!userSnapshot.exists()) {
         await setDoc(userRef, {
-          uid: user.uid,
-          email: user.email,
+          uid: user?.uid,
+          email: user?.email,
           companyId: null, // Puedes asignar una empresa aquí si es necesario
         });
       }
