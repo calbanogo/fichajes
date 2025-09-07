@@ -46,9 +46,10 @@ export class CreateEmployeePage implements OnInit {
     const companyId = this.companyService.getSelectedCompany()?.companyId ?? '';
     try {
       await this.employeeService.createEmployee( companyId , this.createEmployeeForm.value);
-      this.utilsService.showToast('Empleado creado con éxito ✅');
+      this.createEmployeeForm.reset();
+      await this.utilsService.showToast('Empleado creado con éxito ✅');
     } catch (error) {
-      this.utilsService.showToast('Error al crear el empleado ❌');
+      await this.utilsService.showToast('Error al crear el empleado ❌');
     }
      
   }

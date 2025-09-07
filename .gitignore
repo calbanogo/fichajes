@@ -28,7 +28,9 @@ log.txt
 /tmp
 /out-tsc
 /bazel-out
-src/environmments/*
+
+# Environment files (ajusta según tu estructura)
+src/environments/
 
 # Node
 /node_modules

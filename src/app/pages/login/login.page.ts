@@ -17,7 +17,7 @@ import { UtilsService } from 'src/app/services/utils-service';
   standalone: true,
   imports: [
     ReactiveFormsModule, IonContent,
-    CustomHeaderComponent
+    CustomHeaderComponent, IonHeader
 ],
 })
 export class LoginPage {
@@ -39,6 +39,7 @@ export class LoginPage {
     try {
       const user = await this.authService.loginWithGoogle();
       if(user?.uid) {
+        document.activeElement instanceof HTMLElement && document.activeElement.blur();
         this.router.navigate(['/welcome']);
       }
     } catch (error) {

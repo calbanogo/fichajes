@@ -33,19 +33,16 @@ export class WelcomePage {
 
   async ionViewWillEnter() {
     try {
-      console.log('ionViewWillEnter triggered');
       const user = await FirebaseAuthentication.getCurrentUser();
       this.noCompanyMessage = null;
       if (user.user?.uid) {
         this.userData = await this.authService.getUserData(user.user.uid);
-        console.log('User data:', this.userData);
         if (this.userData && (!this.userData.companies || this.userData.companies.length === 0)) {
           // Verifica si companyId no existe o si el array está vacío
           this.noCompanyMessage = 'No tiene todavía empresa creada';
         } else {
           // Aquí podrías cargar la lista de empresas si es necesario
           this.companyList = this.userData.companies || [];
-          console.log('Company list:', this.companyList);
         }
       }
     } catch (error) {
@@ -55,14 +52,11 @@ export class WelcomePage {
   }
 
   navigateTo(path: string) {
-    console.log(`Navigating to /${path}`);
     this.router.navigate([`/welcome/${path}`]);
   }
 
   navigateToCompany(companyId: string) {
-    console.log(`Navigating to company with ID: ${companyId}`);
-    // Aquí puedes implementar la lógica para navegar a la página de detalles de la empresa
-    // Por ejemplo:
+
     this.companyService.selectCompany(this.companyList.find(c => c.companyId === companyId)!);
     this.router.navigate([`/company/tab0`]);
   }

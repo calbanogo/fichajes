@@ -13,10 +13,8 @@ export class AuthGuard implements CanActivate {
       const user = await FirebaseAuthentication.getCurrentUser();
 
       if (user?.user?.uid) {
-        console.log('Usuario autenticado:', user.user.uid);
         return true; // Usuario autenticado
       } else {
-        console.log('Usuario no autenticado');
         this.router.navigate(['/login']); // Redirige si no está logueado
         return false;
       }

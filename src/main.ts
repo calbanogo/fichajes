@@ -9,9 +9,9 @@ import { environment } from './environments/environment';
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { addIcons } from 'ionicons';
-import { add, arrowBack, barChartOutline, calendarOutline, closeOutline, createOutline, ellipsisVertical, logoGoogle, peopleCircleOutline, settingsOutline, trashOutline } from 'ionicons/icons';
+import { add, airplaneOutline, arrowBack, barChartOutline, calendarOutline, closeOutline, createOutline, ellipsisVertical, logoGoogle, peopleCircleOutline, personCircleOutline, settingsOutline, timeOutline, trashOutline } from 'ionicons/icons';
 import { setLogLevel, LogLevel } from '@angular/fire';
-import { provideAnimations } from '@angular/platform-browser/animations';
+
 
 setLogLevel(LogLevel.SILENT);
 
@@ -27,14 +27,18 @@ addIcons({
   'ellipsis-vertical': ellipsisVertical,
   'create-outline': createOutline,
   'trash-outline': trashOutline,
+  'person-circle-outline': personCircleOutline,
+  'airplane-outline': airplaneOutline,
+  'time-outline': timeOutline
 });
+
+initializeApp(environment.firebase);
 
 bootstrapApplication(AppComponent, {
   providers: [
     { 
       provide: RouteReuseStrategy, useClass: IonicRouteStrategy 
     },
-    provideAnimations(),
     provideIonicAngular({mode: 'md'}),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideFirebaseApp(() => initializeApp(environment.firebase)),

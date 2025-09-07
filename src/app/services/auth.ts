@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EnvironmentInjector, inject, Injectable, runInInjectionContext } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
 import { doc, Firestore, getDoc, setDoc } from '@angular/fire/firestore';
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
@@ -9,13 +9,12 @@ import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 })
 export class AuthService {
 
-  constructor(private auth: Auth, private firestore: Firestore) {}
+  constructor(private auth: Auth, private firestore: Firestore, private injector: EnvironmentInjector) {}
 
   // Registro de usuario
   async register(email: string, password: string) {
     try {
       const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
-      console.log('Usuario registrado:', userCredential.user);
       return userCredential.user;
     } catch (error) {
       console.error('Error al registrar usuario:', error);
@@ -25,24 +24,24 @@ export class AuthService {
   // Inicio de sesión con Google
   async loginWithGoogle() {
     try {
-      const result = await FirebaseAuthentication.signInWithGoogle();
-      const user = result.user;
+      return await runInInjectionContext(this.injector, async () => {
+        const firestore = inject(Firestore);
+        const result = await FirebaseAuthentication.signInWithGoogle();
+        const user = result.user;
 
-      localStorage.setItem('isLoggedIn', 'true');
-      // Guarda los datos del usuario en Firestore
-      const userRef = doc(this.firestore, `users/${user?.uid}`);
-      const userSnapshot = await getDoc(userRef);
-      // console.log('User snapshot:', userSnapshot);
-      if (!userSnapshot.exists()) {
-        await setDoc(userRef, {
-          uid: user?.uid,
-          email: user?.email,
-          companyId: null, // Puedes asignar una empresa aquí si es necesario
-        });
-      }
+        const userRef = doc(firestore, `users/${user?.uid}`);
+        const userSnapshot = await getDoc(userRef);
 
-      console.log('Usuario autenticado con Google:', user);
-      return user;
+        if (!userSnapshot.exists()) {
+          await setDoc(userRef, {
+            uid: user?.uid,
+            email: user?.email,
+            companyId: null,
+          });
+        }
+
+        return user;
+      });
     } catch (error) {
       console.error('Error al iniciar sesión con Google:', error);
       throw error;
@@ -54,7 +53,6 @@ export class AuthService {
     try {
       await signOut(this.auth);
       localStorage.removeItem('isLoggedIn');
-      console.log('Sesión cerrada');
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
       throw error;

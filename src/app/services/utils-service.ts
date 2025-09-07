@@ -20,7 +20,7 @@ export class UtilsService {
         message,
         duration: 2000,
         position: 'bottom',
-        positionAnchor: 'footer',
+        positionAnchor: 'bottom',
         color: 'success'
       });
       await toast.present();
@@ -31,7 +31,6 @@ export class UtilsService {
           position: 'bottom'
         });
     }
-
   }
 
   public async showLoading(message: string): Promise<any> {

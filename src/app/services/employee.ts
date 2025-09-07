@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { addDoc, collection, deleteDoc, doc, Firestore, getDocs, orderBy, query, where } from '@angular/fire/firestore';
+import { addDoc, collection, deleteDoc, doc, Firestore, getDocs, orderBy, query, updateDoc, where } from '@angular/fire/firestore';
 import { Subject } from 'rxjs';
+import { UtilsService } from './utils-service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,8 @@ import { Subject } from 'rxjs';
 export class EmployeeService {
   private reloadEmployees$ = new Subject<void>();
   constructor(
-    private firestore: Firestore
+    private firestore: Firestore,
+    private utilsService: UtilsService
   ) { }
 
   get reloadEmployees() {
@@ -19,24 +21,28 @@ export class EmployeeService {
     this.reloadEmployees$.next();
   }
 
-    async createEmployee(companyId: string, employee: any) {
+  async createEmployee(companyId: string, employee: any) {
     try {
       const employeesCollectionRef = collection(this.firestore, 'employees');
-      const newEmployeeData = {
-        ...employee,         // Aquí van los datos del empleado
-        companyId: companyId // Asociamos el empleado con la empresa
-      };
 
-      const docRef = await addDoc(employeesCollectionRef, newEmployeeData);
-      console.log('Empleado creado con ID:', docRef.id);
+      // Creamos el documento primero
+      const docRef = await addDoc(employeesCollectionRef, {
+        ...employee,
+        companyId: companyId
+      });
+
+      // Luego actualizamos el mismo documento con su propio ID
+      await updateDoc(docRef, {
+        employeeId: docRef.id
+      });
+
     } catch (error) {
-      console.error('Error al añadir el empleado:', error);
+
     }
   }
 
   async getEmployees(companyId: string) {
     try {
-        console.log('Getting employees for company ID:', companyId);
         const employeesCollectionRef = collection(this.firestore, 'employees');
         const q = query(
           employeesCollectionRef,
@@ -62,9 +68,9 @@ export class EmployeeService {
     try {
       const employeeRef = doc(this.firestore, 'employees', employeeId);
       await deleteDoc(employeeRef);
-      console.log(`Empleado ${employeeId} eliminado correctamente`);
+      this.utilsService.showToast('Empleado eliminado con éxito ✅');
     } catch (error) {
-      console.error('Error al eliminar el empleado:', error);
+      this.utilsService.showToast('Error al eliminar el empleado ❌');
       throw error;
     }
   }

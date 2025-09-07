@@ -4,6 +4,9 @@ const config: CapacitorConfig = {
   appId: 'com.fichajes.app',
   appName: 'fichajesPersonal',
   webDir: 'www',
+  android: {
+    adjustMarginsForEdgeToEdge: 'auto'
+  },
   plugins: {
     FirebaseAuthentication: {
       providers: ['google.com'],

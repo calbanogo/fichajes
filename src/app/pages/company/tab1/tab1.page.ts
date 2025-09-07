@@ -41,7 +41,6 @@ export class Tab1Page implements OnInit {
       const companyId = this.companyService.getSelectedCompany()?.companyId ?? '';
       this.employeeService.getEmployees(companyId).then(employees => {
         this.employees = employees;
-        console.log('Employees reloaded:', this.employees);
       });
     });
   }
@@ -50,7 +49,7 @@ export class Tab1Page implements OnInit {
     const companyId = this.companyService.getSelectedCompany()?.companyId ?? '';
     this.employeeService.getEmployees(companyId).then(employees => {
       this.employees = employees;
-      console.log('Employees loaded:', this.employees);
+
     });
   }
 
@@ -65,18 +64,15 @@ export class Tab1Page implements OnInit {
   }
 
   public editEmployee(employee: any) {
-    console.log('Icono clicado para:', employee);
     // Aquí puedes abrir un modal, navegar, mostrar un toast, etc.
   }
 
   public deleteEmployee(employee: any) {
-    console.log('Icono clicado para:', employee);
     this.employeeService.deleteEmployee(employee.id).then(() => {
       const companyId = this.companyService.getSelectedCompany()?.companyId ?? '';
         this.utilsService.showToast('Empleado eliminado con éxito ✅');
       this.employeeService.getEmployees(companyId).then(employees => {
         this.employees = employees;
-        console.log('Employees reloaded after deletion:', this.employees);
         });
       }).catch(error => {
         console.error('Error al eliminar el empleado:', error);
@@ -87,7 +83,6 @@ export class Tab1Page implements OnInit {
 
 
   async presentEmployeeActions(employee: any) {
-    console.log('Click detectado:', employee);
     if (Capacitor.getPlatform() === 'web') {
   // Mostrar un dialog de Angular/Ionic
    const actionSheet = await this.actionSheetController.create({

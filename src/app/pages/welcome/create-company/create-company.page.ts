@@ -5,7 +5,7 @@ import {
   IonContent, IonToolbar, IonInput,
   IonButtons, IonBackButton, IonItem,  
   IonTextarea,  IonList, IonTitle, IonLabel, 
-  IonDatetime, IonToggle } from '@ionic/angular/standalone';
+  IonToggle } from '@ionic/angular/standalone';
 
 import { CompanyService } from 'src/app/services/company';
 import { Router } from '@angular/router';
@@ -44,22 +44,22 @@ export class CreateCompanyPage implements OnInit {
     });
 
     this.hoursForm = this.fb.group({
-      dias: this.fb.array(
-        this.diasSemana.map(dia =>
+      days: this.fb.array(
+        this.diasSemana.map(day =>
           this.fb.group({
-            nombre: [dia],
-            activo: [false],
-            horaInicio: [{ value: '09:00', disabled: true }],
-            horaFin: [{ value: '18:00', disabled: true }]
+            name: [day],
+            active: [false],
+            hourInit: [{ value: '09:00', disabled: true }],
+            hourFinish: [{ value: '18:00', disabled: true }]
           })
         )
       )
     });
 
-    this.dias.controls.forEach((grupo) => {
-      grupo.get('activo')?.valueChanges.subscribe((activo: boolean) => {
-        const horaInicio = grupo.get('horaInicio');
-        const horaFin = grupo.get('horaFin');
+    this.days.controls.forEach((grupo) => {
+      grupo.get('active')?.valueChanges.subscribe((activo: boolean) => {
+        const horaInicio = grupo.get('hourInit');
+        const horaFin = grupo.get('hourFinish');
 
         if (activo) {
           horaInicio?.enable();
@@ -72,12 +72,12 @@ export class CreateCompanyPage implements OnInit {
     });
   }
 
-  get dias(): FormArray {
-    return this.hoursForm.get('dias') as FormArray;
+  get days(): FormArray {
+    return this.hoursForm.get('days') as FormArray;
   }
 
   getGrupo(i: number): FormGroup {
-    return this.dias.at(i) as FormGroup;
+    return this.days.at(i) as FormGroup;
   }
 
   async onSubmit() {
@@ -85,15 +85,12 @@ export class CreateCompanyPage implements OnInit {
       const user = await FirebaseAuthentication.getCurrentUser();
        if (user.user?.uid) {
         const userId = user.user.uid // Obtén el UID del usuario
-        await this.companyService.addCompany(this.createCompanyForm.value, userId); // Pasa el UID al servicio
-        console.log('Formulario enviado:', this.createCompanyForm.value);
-       
-        this.router.navigate(['/welcome']);
+        await this.companyService.addCompany({...this.createCompanyForm.value, ...this.hoursForm.value}, userId); // Pasa el UID al servicio
 
+        this.router.navigate(['/welcome']);
       } else {
         console.error('No hay un usuario autenticado');
       }
-      console.log('Formulario enviado:', this.createCompanyForm.value);
     }
   }
 }
