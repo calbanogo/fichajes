@@ -53,3 +53,7 @@
 :root {
   --ion-font-family: 'MiFuente', sans-serif;
 }
+
+body {
+  padding-top: env(safe-area-inset-top);
+}

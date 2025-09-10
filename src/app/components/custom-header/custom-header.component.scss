@@ -18,10 +18,13 @@
     margin: 0;
     font-size: 1.2rem;
     font-weight: 400;
+    font-size: 14px;
+    color: var(--ion-color-medium);
   }
 }
 
 .header-custom-little {
+
   background-color: var(--ion-color-light);
   display: flex;
   flex-direction: column;

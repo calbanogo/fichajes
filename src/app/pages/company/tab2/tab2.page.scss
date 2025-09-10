@@ -63,3 +63,63 @@
   --color: #333;
   --color-checked: #3880ff;
 }
+
+.asistencia-grid {
+  min-width: max-content;
+  ion-row {
+    border-bottom: 1px solid #eee;
+    align-items: center;
+  }
+
+  ion-col {
+    text-align: center;
+    font-size: 13px;
+    padding: 6px 6px;
+  }
+
+  .header-row {
+    background-color: #f4f4f4;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+}
+
+.scroll-x-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+}
+
+.asistencia-grid {
+  min-width: fit-content; /* Evita que las columnas se ajusten al ancho del contenedor */
+}
+
+.header-row,
+ion-row {
+  flex-wrap: nowrap !important; /* Evita que las columnas se rompan en varias líneas */
+}
+
+ion-col[size="1"] {
+  min-width: 5px; /* Ajusta según tu diseño */
+}
+
+.trabajador-col {
+  width: 120px;
+  flex: 0 0 auto;
+  position: sticky;
+  left: 0;
+  z-index: 10; /* Asegura que quede por encima del resto */
+  background: var(--ion-color-light);
+  white-space: nowrap;       /* evita que el texto se divida en varias líneas */
+  overflow: hidden;          /* oculta el contenido que se sale */
+  text-overflow: ellipsis;   
+}
+
+// .dia-col {
+//   min-width: 10px;
+//   flex: 0 0 auto;
+//   text-align: center;
+// }

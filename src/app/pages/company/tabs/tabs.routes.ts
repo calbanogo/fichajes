@@ -39,5 +39,10 @@ export const tabRoutes: Routes = [
     path: 'tab1/create-employee',
     loadComponent: () =>
       import('../tab1/create-employee/create-employee.page').then(m => m.CreateEmployeePage),
+  },
+  {
+    path: 'tab2/attendance-detail',
+    loadComponent: () =>
+      import('../tab2/attendance-detail/attendance-detail.page').then(m => m.AttendanceDetailPage),
   }
 ];

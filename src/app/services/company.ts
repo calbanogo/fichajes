@@ -99,5 +99,13 @@ export class CompanyService {
       where('date', '<=', dateEnd),
       orderBy('date')
     );
+    
+    const querySnapshot = await getDocs(q);
+
+     const attendance: any[] = [];
+        querySnapshot.forEach((doc) => {
+          attendance.push({ id: doc.id, ...doc.data() });
+        });
+        return attendance;
   }
 }

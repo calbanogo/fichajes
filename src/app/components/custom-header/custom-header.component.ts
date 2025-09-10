@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import { IonToolbar, IonHeader } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-custom-header',
   templateUrl: './custom-header.component.html',
   styleUrls: ['./custom-header.component.scss'],
-  imports: [CommonModule],
+  imports: [IonHeader, IonToolbar, CommonModule],
 })
 export class CustomHeaderComponent  implements OnInit {
 

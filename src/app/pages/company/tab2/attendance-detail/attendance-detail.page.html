@@ -1,0 +1,47 @@
+<ion-toolbar>
+  <ion-buttons slot="start">
+    <ion-button (click)="goBack()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+  <ion-title>
+    <app-custom-header [little]="true" [title]="'Detalle Asistencias'">
+    </app-custom-header>
+  </ion-title>
+</ion-toolbar>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-title class="center-title">{{attendances.name}}</ion-title>
+  <app-chart-attendance
+    [attendance]="attendances.attendance"
+  ></app-chart-attendance>
+  <ion-item>
+    <ion-label>
+    {{attendances.day ? 'Asistencia del día: ' : 'Asistencia de los últimos: '}} {{attendances.dateRange}} {{ attendances.day ? '' :'días'}}</ion-label
+    >
+  </ion-item>
+  <ion-item lines="none">
+    <ion-label
+      >Asistencia ✅: {{assist}} - {{ assist / attendanceLength * 100 |
+      number:'1.2-2' }} %</ion-label
+    >
+  </ion-item>
+  <ion-item lines="none">
+    <ion-label
+      >Retraso ⏰: {{retard }} - {{ retard / attendanceLength * 100 |
+      number:'1.2-2' }} %</ion-label
+    >
+  </ion-item>
+  <ion-item lines="none">
+    <ion-label
+      >Falta ❌: {{notAssist}} - {{ notAssist / attendanceLength * 100 |
+      number:'1.2-2'}} %</ion-label
+    >
+  </ion-item>
+  <ion-item lines="none">
+    <ion-label
+      >Permiso 📄: {{permission}} - {{ permission / attendanceLength * 100 |
+      number:'1.2-2'}} %</ion-label
+    >
+  </ion-item>
+</ion-content>

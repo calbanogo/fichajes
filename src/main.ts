@@ -9,9 +9,9 @@ import { environment } from './environments/environment';
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { addIcons } from 'ionicons';
-import { add, airplaneOutline, arrowBack, barChartOutline, calendarOutline, closeOutline, createOutline, ellipsisVertical, logoGoogle, peopleCircleOutline, personCircleOutline, settingsOutline, timeOutline, trashOutline } from 'ionicons/icons';
+import { add, airplaneOutline, arrowBack, barChartOutline, calendarOutline, checkboxOutline, checkmark, checkmarkCircle, closeOutline, createOutline, ellipsisVertical, logoGoogle, peopleCircleOutline, personCircleOutline, removeOutline, settingsOutline, timeOutline, trashOutline } from 'ionicons/icons';
 import { setLogLevel, LogLevel } from '@angular/fire';
-
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 setLogLevel(LogLevel.SILENT);
 
@@ -29,7 +29,11 @@ addIcons({
   'trash-outline': trashOutline,
   'person-circle-outline': personCircleOutline,
   'airplane-outline': airplaneOutline,
-  'time-outline': timeOutline
+  'time-outline': timeOutline,
+  'remove-outline': removeOutline,
+  'checkmark': checkmark,
+  'checkbox-outline': checkboxOutline,
+
 });
 
 initializeApp(environment.firebase);
@@ -44,9 +48,11 @@ bootstrapApplication(AppComponent, {
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     provideAuth(() => getAuth()),
+    provideCharts(withDefaultRegisterables()),
     {
     provide: Storage,
     useFactory: () => new Storage(),
+  
   }
   ],
 });
