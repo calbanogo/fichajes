@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   IonContent,
-  IonHeader,
   IonTitle,
   IonToolbar,
   IonButtons,
-  IonBackButton,
   IonButton,
-  IonIcon, IonLabel, IonItem } from '@ionic/angular/standalone';
+  IonIcon,
+  IonLabel,
+} from '@ionic/angular/standalone';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { ChartAttendanceComponent } from '../chart-attendance/chart-attendance.component';
 import { Router } from '@angular/router';
@@ -20,7 +20,8 @@ import { CustomHeaderComponent } from 'src/app/components/custom-header/custom-h
   templateUrl: './attendance-detail.page.html',
   styleUrls: ['./attendance-detail.page.scss'],
   standalone: true,
-  imports: [IonItem, IonLabel, 
+  imports: [
+    IonLabel,
     IonIcon,
     IonButton,
     IonButtons,
@@ -51,39 +52,55 @@ export class AttendanceDetailPage implements OnInit {
   public assist: number = 0;
   public notAssist: number = 0;
   public attendanceLength = 0;
+  public labelTexto!: string;
 
   constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.attendances = history.state;
-    this.calculateAttendance(Object.values(this.attendances.attendance))
+    this.calculateAttendance(Object.values(this.attendances.attendance));
+    this.labelTexto = this.generateTextoLabel();
   }
 
   public goBack() {
     this.router.navigate(['/company/tab2']);
   }
 
-public calculateAttendance(attendance: string[]): void {
-  if (!Array.isArray(attendance)) return;
-  this.attendanceLength = attendance.length;
-  attendance.forEach((att) => {
-    switch (att) {
-      case 'asistencia':
-        this.assist++;
-        break;
-      case 'permiso':
-        this.permission++;
-        break;
-      case 'falta':
-        this.notAssist++;
-        break;
-      case 'retraso':
-        this.retard++;
-        break;
-      default:
-        console.warn(`Tipo de asistencia desconocido: ${att}`);
-    }
-  });
-}
+  public calculateAttendance(attendance: string[]): void {
+    if (!Array.isArray(attendance)) return;
+    this.attendanceLength = attendance.length;
+    attendance.forEach((att) => {
+      switch (att) {
+        case 'asistencia':
+          this.assist++;
+          break;
+        case 'permiso':
+          this.permission++;
+          break;
+        case 'falta':
+          this.notAssist++;
+          break;
+        case 'retraso':
+          this.retard++;
+          break;
+        default:
+          console.warn(`Tipo de asistencia desconocido: ${att}`);
+      }
+    });
+  }
 
+  generateTextoLabel(): string {
+    const tipo = this.attendances.dateRange; // 'dia' | 'mes' | 'anio'
+
+    switch (tipo) {
+      case 'dia':
+        return `Asistencia del día: ${this.attendances.detail}`;
+      case 'mes':
+        return `Asistencia del mes: ${this.attendances.detail}`;
+      case 'anio':
+        return `Asistencia del año: ${this.attendances.detail}`;
+      default:
+        return `Asistencia del día: ${this.attendances.dateRange}`;
+    }
+  }
 }

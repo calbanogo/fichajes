@@ -1,0 +1,91 @@
+.asistencia-grid {
+  min-width: max-content;
+  ion-row {
+    border-bottom: 1px solid #eee;
+    align-items: center;
+  }
+
+  ion-col {
+    text-align: center;
+    font-size: 13px;
+    padding: 6px 6px;
+  }
+
+  .header-row {
+    background-color: #f4f4f4;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+}
+
+.scroll-x-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+}
+
+.asistencia-grid {
+  min-width: fit-content; /* Evita que las columnas se ajusten al ancho del contenedor */
+}
+
+.header-row,
+ion-row {
+  flex-wrap: nowrap !important; /* Evita que las columnas se rompan en varias líneas */
+}
+
+ion-col[size="1"] {
+  min-width: 5px; /* Ajusta según tu diseño */
+}
+
+.trabajador-col {
+  width: 120px;
+  flex: 0 0 auto;
+  position: sticky;
+  left: 0;
+  z-index: 10; /* Asegura que quede por encima del resto */
+  background: var(--ion-color-light);
+  white-space: nowrap;       /* evita que el texto se divida en varias líneas */
+  overflow: hidden;          /* oculta el contenido que se sale */
+  text-overflow: ellipsis;   
+}
+
+.select-solo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 12px;
+  background: #f5f6fa;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.select-solo ion-select {
+  --highlight-color-focused: transparent;
+  --highlight-color-valid: transparent;
+  --highlight-color: transparent;
+  --border: none;
+  --border-width: 0;
+  --inner-border-width: 0;
+  box-shadow: none;
+}
+
+.rangoDiasShow{
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.mensaje-vacio {
+  min-height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}

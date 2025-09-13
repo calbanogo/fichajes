@@ -1,0 +1,21 @@
+@if (donutItems.length > 0) {
+  <div class="donut-group">
+    @for (item of donutItems; track item.tipo) {
+      <div class="donut-item">
+        <canvas
+          baseChart
+          [data]="item.chartData"
+          [type]="chartType"
+          [options]="chartOptions"
+          [plugins]="[item.chartPlugin]"
+        ></canvas>
+        <div class="donut-label">
+          {{ item.icono }} {{ item.label }} {{ item.valor }}
+        </div>
+      </div>
+    }
+  </div>
+}
+@else {
+  <ion-text color="medium">No hay datos para mostrar</ion-text>
+}

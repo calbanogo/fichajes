@@ -1,0 +1,21 @@
+<ion-toolbar>
+  <ion-buttons slot="start">
+    <ion-button (click)="goBack()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+  <ion-title>
+    <app-custom-header [little]="true" [title]="'Detalle Asistencias'">
+    </app-custom-header>
+  </ion-title>
+</ion-toolbar>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-title class="center-title">{{attendances.name}}</ion-title>
+
+  <ion-label class="center-title">{{ labelTexto }}</ion-label>
+
+  <app-chart-attendance
+    [attendance]="attendances.attendance"
+  ></app-chart-attendance>
+</ion-content>

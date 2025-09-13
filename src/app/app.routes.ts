@@ -23,6 +23,6 @@ export const routes: Routes = [
   },
   {
     path: 'attendance-detail',
-    loadComponent: () => import('./pages/company/tab2/attendance-detail/attendance-detail.page').then( m => m.AttendanceDetailPage)
+    loadComponent: () => import('./pages/company/tab2/components/attendance-list/attendance-detail/attendance-detail.page').then( m => m.AttendanceDetailPage)
   }
 ];

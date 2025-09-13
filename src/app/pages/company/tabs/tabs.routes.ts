@@ -43,6 +43,6 @@ export const tabRoutes: Routes = [
   {
     path: 'tab2/attendance-detail',
     loadComponent: () =>
-      import('../tab2/attendance-detail/attendance-detail.page').then(m => m.AttendanceDetailPage),
+      import('../tab2/components/attendance-list/attendance-detail/attendance-detail.page').then(m => m.AttendanceDetailPage),
   }
 ];

@@ -1,0 +1,57 @@
+.empleado-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 10px;
+  margin: 8px 12px;
+  border-radius: 12px;
+  background: var(--ion-color-light);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.empleado-nombre {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.empleado-icon {
+  font-size: 32px;
+  color: var(--ion-color-primary);
+}
+
+.empleado-texto {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.empleado-nombre-texto {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0; 
+  font-size: 14px;
+}
+
+.empleado-apellido {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--ion-color-medium);
+  font-size: 14px;
+}
+
+.empleado-select {
+  min-width: 120px;
+  max-width: 140px;
+  font-size: 14px;
+  --padding-start: 8px;
+  --padding-end: 8px;
+  --border-radius: 8px;
+  --background: white;
+  --placeholder-color: var(--ion-color-medium);
+  --placeholder-font-size: 10px;
+}

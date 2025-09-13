@@ -1,0 +1,18 @@
+.donut-group {
+  padding: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+.donut-item {
+  width: 120px;
+  text-align: center;
+}
+.donut-label {
+  margin-top: 0.5rem;
+  font-weight: 600;
+  font-size: 15px;
+  color: #333;
+  letter-spacing: 0.3px;
+}

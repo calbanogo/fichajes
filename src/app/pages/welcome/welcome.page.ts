@@ -58,6 +58,6 @@ export class WelcomePage {
   navigateToCompany(companyId: string) {
 
     this.companyService.selectCompany(this.companyList.find(c => c.companyId === companyId)!);
-    this.router.navigate([`/company/tab0`]);
+    this.router.navigate([`/company/tab1`]);
   }
 }

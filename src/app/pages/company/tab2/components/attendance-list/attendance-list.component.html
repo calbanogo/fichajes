@@ -1,0 +1,93 @@
+<ion-grid fixed>
+  <ion-row>
+    <ion-col size="5">
+      <div class="select-solo">
+        <ion-select
+          appFocusFix
+          [(ngModel)]="rangoDias"
+          [ngModelOptions]="{ standalone: true }"
+          interface="popover"
+          (ngModelChange)="cargarEmpleados()"
+        >
+          <ion-select-option value="dia">Día</ion-select-option>
+          <ion-select-option value="mes">Mes</ion-select-option>
+          <ion-select-option value="anio">Año</ion-select-option>
+          <!-- <ion-select-option value="custom">Personalizado</ion-select-option> -->
+        </ion-select>
+      </div>
+    </ion-col>
+    <ion-col size="7">
+      <ion-text
+        class="rangoDiasShow"
+        color="primary"
+        (click)="abrirPopoverDays($event)"
+      >
+        <strong>{{ rangoDiasShow }}</strong>
+      </ion-text>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+<div class="scroll-x-container">
+  <ion-grid class="asistencia-grid">
+    <ion-row class="header-row">
+      @if (diasMes.length) {
+      <ion-col class="trabajador-col"><strong>Trabajador</strong></ion-col>
+
+      } @if (diasMes.length === 0) {
+      <ion-grid>
+        <ion-row
+          class="ion-justify-content-center ion-align-items-center mensaje-vacio"
+        >
+          <ion-col size="12" class="ion-text-center">
+            <ion-text color="danger">⚠️ No existen registros</ion-text>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      } @for (dia of diasMes; track dia) {
+      <ion-col class="dia-col" (click)="navigateDetail(dia)">{{
+        dia | date : "dd/MM"
+      }}</ion-col>
+      }
+    </ion-row>
+
+    @for (empleado of empleados; track empleado.id) {
+    <ion-row>
+      <ion-col class="trabajador-col" (click)="navigateDetail(empleado)">{{
+        empleado.name
+      }}</ion-col>
+
+      @for (dia of diasMes; track dia) {
+      <ion-col class="dia-col">
+        @if (empleado.asistencias[dia]) {
+        <ion-label>{{ getIcon(empleado.asistencias[dia]) }}</ion-label>
+        } @else {
+        <ion-icon name="remove-outline" color="medium"></ion-icon>
+        }
+      </ion-col>
+      }
+    </ion-row>
+    }
+  </ion-grid>
+</div>
+
+<!-- Popover calendario Selector de dia en el listado -->
+<ion-popover
+  [isOpen]="mostrarPopoverDays"
+  [event]="eventoPopoverDays"
+  (didDismiss)="cerrarPopoverDays()"
+>
+  <ng-template>
+    <ion-datetime
+      [presentation]="presentationDays"
+      [value]="selectDayValue"
+      (ionChange)="selectDay($event.detail.value)"
+      showDefaultButtons="true"
+      doneText="Confirmar"
+      cancelText="Cancelar"
+      [max]="today"
+      [firstDayOfWeek]="1"
+    >
+    </ion-datetime>
+  </ng-template>
+</ion-popover>
