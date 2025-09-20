@@ -8,7 +8,7 @@
           [(ngModel)]="rangoDias"
           [ngModelOptions]="{ standalone: true }"
           interface="popover"
-          (ngModelChange)="cargarEmpleados()"
+          (ngModelChange)="loadEmployeesAttendance()"
         >
           <ion-select-option value="dia">Día</ion-select-option>
           <ion-select-option value="mes">Mes</ion-select-option>

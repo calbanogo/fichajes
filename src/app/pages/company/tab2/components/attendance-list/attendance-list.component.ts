@@ -16,6 +16,8 @@ import { AsistenciaDia } from '../../tab2.page';
 import { DatePipe } from '@angular/common';
 import { FocusFixDirective } from 'src/app/directives/focus-fix.drective';
 import { FormsModule } from '@angular/forms';
+import { EmployeeService } from 'src/app/services/employee';
+import { UtilsService } from 'src/app/services/utils-service';
 
 @Component({
   selector: 'app-attendance-list',
@@ -50,6 +52,7 @@ export class AttendanceListComponent implements OnInit {
   public eventoPopoverDays: any;
   public presentationDays!: string;
   public selectDayValue!: any;
+  private actualEmployees: any[] = [];
 
   public meses: string[] = [
     'enero',
@@ -69,11 +72,14 @@ export class AttendanceListComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private companyService: CompanyService
+    private companyService: CompanyService,
+    private employeeService: EmployeeService,
+    private utilsService: UtilsService
   ) {}
 
-  ngOnInit() {
-    this.cargarEmpleados();
+  async ngOnInit() {
+    await this.loadEmployees();
+    await this.loadEmployeesAttendance();
   }
 
   public abrirPopoverDays(event: Event): void {
@@ -83,7 +89,7 @@ export class AttendanceListComponent implements OnInit {
     }, 120);
   }
 
-  public async cargarEmpleados(): Promise<void> {
+  public async loadEmployeesAttendance(): Promise<void> {
     let fechaFin = new Date();
     let fechaInicio = new Date();
     switch (this.rangoDias) {
@@ -114,7 +120,6 @@ export class AttendanceListComponent implements OnInit {
         break;
 
       default:
-        console.warn('Rango no reconocido:', this.rangoDias);
         return;
     }
 
@@ -165,7 +170,6 @@ export class AttendanceListComponent implements OnInit {
         break;
 
       default:
-        console.warn('Rango no reconocido:', this.rangoDias);
         return;
     }
 
@@ -231,29 +235,48 @@ export class AttendanceListComponent implements OnInit {
     this.mostrarPopoverDays = false;
   }
 
-  private procesarAsistencias(attendance: AsistenciaDia[]): void {
-    const diasConDatos = new Set<string>();
-    const mapaEmpleados = new Map<string, any>();
+private procesarAsistencias(attendance: AsistenciaDia[]): void {
+  const diasConDatos = new Set<string>();
+  const mapaEmpleados = new Map<string, any>();
 
-    for (const dia of attendance) {
-      const fecha = dia.date;
+  const empleadosMap = new Map(this.actualEmployees.map(e => [e.id, e]));
 
-      for (const emp of dia.employees) {
-        if (emp.state) diasConDatos.add(fecha);
+  for (const dia of attendance) {
+    const fecha = dia.date;
 
-        if (!mapaEmpleados.has(emp.id)) {
-          mapaEmpleados.set(emp.id, {
-            id: emp.id,
-            name: `${emp.name} ${emp.surname}`,
-            asistencias: {},
-          });
-        }
+    for (const emp of dia.employees) {
+      if (emp.state) diasConDatos.add(fecha);
 
-        mapaEmpleados.get(emp.id).asistencias[fecha] = emp.state;
+      if (!mapaEmpleados.has(emp.id)) {
+        const actual = empleadosMap.get(emp.id);
+
+        mapaEmpleados.set(emp.id, {
+          id: emp.id,
+          name: actual
+            ? `${actual.name} ${actual.surname}`
+            : `${emp.name} ${emp.surname}`,
+          asistencias: {},
+          isDeleted: !actual // opcional: marcar si fue eliminado
+        });
       }
-    }
 
-    this.diasMes = Array.from(diasConDatos).sort();
-    this.empleados = Array.from(mapaEmpleados.values());
+      mapaEmpleados.get(emp.id).asistencias[fecha] = emp.state;
+    }
   }
+
+  this.diasMes = Array.from(diasConDatos).sort();
+  this.empleados = Array.from(mapaEmpleados.values());
+}
+
+  private async loadEmployees() {
+  const companyId = this.companyService.getSelectedCompany()?.companyId;
+  if (!companyId) return;
+
+  try {
+    const employees = await this.employeeService.getEmployees(companyId);
+    this.actualEmployees = employees;
+  } catch (error) {
+    await this.utilsService.showToast('Error al cargar empleados ❌');
+  }
+}
 }

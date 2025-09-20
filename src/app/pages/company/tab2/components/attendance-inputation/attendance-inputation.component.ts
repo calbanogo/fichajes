@@ -117,36 +117,28 @@ export class AttendanceInputationComponent implements OnInit {
       });
   }
 
-  private obtenerAsistenciaPorFecha(fecha: string): void {
-    this.companyService
-      .getAttendance(this.companyId, fecha, fecha)
-      .then((asistencias: AsistenciaDia[]) => {
-        if (asistencias.length > 0) {
-          const asistenciaDelDia = asistencias[0];
-          const empleadosFormArray = this.fb.array(
-            asistenciaDelDia.employees.map((emp) =>
-              this.crearGrupoEmpleado(emp, emp.state || 'asistencia')
-            )
-          );
-          
-          this.createAsistenciaForm.setControl('employees', empleadosFormArray);
-        } else {
-          this.employeeService
-            .getEmployees(this.companyId)
-            .then((employees) => {
-              const empleadosFormArray = this.fb.array(
-                employees.map((emp) => this.crearGrupoEmpleado(emp))
-              );
-              this.createAsistenciaForm.setControl(
-                'employees',
-                empleadosFormArray
-              );
-            });
-        }
-      });
-  }
+private obtenerAsistenciaPorFecha(fecha: string): void {
+  Promise.all([
+    this.companyService.getAttendance(this.companyId, fecha, fecha),
+    this.employeeService.getEmployees(this.companyId)
+  ]).then(([asistencias, empleadosActuales]) => {
+    const asistenciaDelDia = asistencias.length > 0 ? asistencias[0] : { employees: [] };
 
-  private crearGrupoEmpleado(e: any, estado: string = 'asistencia'): FormGroup {
+    const asistenciaMap = new Map(
+      asistenciaDelDia.employees.map((emp: any) => [emp.id, emp])
+    );
+
+    const empleadosFormArray = this.fb.array(
+      empleadosActuales.map(emp => {
+        const asistencia: any = asistenciaMap.get(emp.id);
+        return this.crearGrupoEmpleado(emp, asistencia?.state || 'asistencia');
+      })
+    );
+
+    this.createAsistenciaForm.setControl('employees', empleadosFormArray);
+  });
+}
+  private crearGrupoEmpleado(e: any, estado: string  = 'asistencia'): FormGroup {
     return this.fb.group({
       id: [e.id],
       name: [e.name],

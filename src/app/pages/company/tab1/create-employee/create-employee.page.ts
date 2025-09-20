@@ -5,7 +5,7 @@ import { IonContent, IonToolbar, IonButtons, IonTitle, IonList, IonItem, IonInpu
 import { CustomHeaderComponent } from "src/app/components/custom-header/custom-header.component";
 import { CustomFooterButtonComponent } from "src/app/components/custom-footer-button/custom-footer-button.component";
 import { CompanyService } from 'src/app/services/company';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { EmployeeService } from 'src/app/services/employee';
 import { UtilsService } from 'src/app/services/utils-service';
@@ -23,11 +23,13 @@ import { UtilsService } from 'src/app/services/utils-service';
 export class CreateEmployeePage implements OnInit {
 
   public createEmployeeForm!: FormGroup;
+  public employeeId?: string;
 
   constructor(
     private fb: FormBuilder,
     private companyService: CompanyService,
     private router: Router,
+    private route: ActivatedRoute,
     private employeeService: EmployeeService,
     private utilsService: UtilsService,
   ) { }
@@ -40,22 +42,46 @@ export class CreateEmployeePage implements OnInit {
       phone: ['' , Validators.pattern('^[0-9]{10}$')],
       description: [''],
     });
+     this.employeeId = this.route.snapshot.paramMap.get('id') ?? undefined;
+
+    if (this.employeeId) {
+      this.loadEmployeeData(this.employeeId);
+    }
   }
 
-  public async onSubmit(){
-    const companyId = this.companyService.getSelectedCompany()?.companyId ?? '';
-    try {
-      await this.employeeService.createEmployee( companyId , this.createEmployeeForm.value);
-      this.createEmployeeForm.reset();
+public async onSubmit() {
+  const companyId = this.companyService.getSelectedCompany()?.companyId ?? '';
+  try {
+    if (this.employeeId) {
+      await this.employeeService.updateEmployee(this.employeeId, this.createEmployeeForm.value);
+      await this.utilsService.showToast('Empleado actualizado con éxito ✅');
+    } else {
+      await this.employeeService.createEmployee(companyId, this.createEmployeeForm.value);
       await this.utilsService.showToast('Empleado creado con éxito ✅');
-    } catch (error) {
-      await this.utilsService.showToast('Error al crear el empleado ❌');
     }
-     
+
+    this.createEmployeeForm.reset();
+    this.goBack();
+  } catch (error) {
+    await this.utilsService.showToast('Error al guardar el empleado ❌');
   }
+}
 
   public goBack() {
     this.employeeService.triggerReload();
     this.router.navigate(['/company/tab1']);
+  }
+
+  private async loadEmployeeData(id: string) {
+    try {
+      const employee = await this.employeeService.getEmployeeById(id);
+      if (employee) {
+        this.createEmployeeForm.patchValue(employee);
+      } else {
+        await this.utilsService.showToast('Empleado no encontrado ❌');
+      }
+    } catch (error) {
+      await this.utilsService.showToast('Error al cargar el empleado ❌');
+    }
   }
 }

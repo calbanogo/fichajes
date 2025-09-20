@@ -1,17 +1,29 @@
 import { Injectable } from '@angular/core';
-import { addDoc, collection, deleteDoc, doc, Firestore, getDocs, orderBy, query, updateDoc, where } from '@angular/fire/firestore';
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  Firestore,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+  updateDoc,
+  where,
+} from '@angular/fire/firestore';
 import { Subject } from 'rxjs';
 import { UtilsService } from './utils-service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EmployeeService {
   private reloadEmployees$ = new Subject<void>();
   constructor(
     private firestore: Firestore,
     private utilsService: UtilsService
-  ) { }
+  ) {}
 
   get reloadEmployees() {
     return this.reloadEmployees$.asObservable();
@@ -28,36 +40,33 @@ export class EmployeeService {
       // Creamos el documento primero
       const docRef = await addDoc(employeesCollectionRef, {
         ...employee,
-        companyId: companyId
+        companyId: companyId,
       });
 
       // Luego actualizamos el mismo documento con su propio ID
       await updateDoc(docRef, {
-        employeeId: docRef.id
+        employeeId: docRef.id,
       });
-
-    } catch (error) {
-
-    }
+    } catch (error) {}
   }
 
   async getEmployees(companyId: string) {
     try {
-        const employeesCollectionRef = collection(this.firestore, 'employees');
-        const q = query(
-          employeesCollectionRef,
-          where('companyId', '==', companyId)
-        );
-        const querySnapshot = await getDocs(q);
+      const employeesCollectionRef = collection(this.firestore, 'employees');
+      const q = query(
+        employeesCollectionRef,
+        where('companyId', '==', companyId)
+      );
+      const querySnapshot = await getDocs(q);
 
-        const employees: any[] = [];
-        querySnapshot.forEach((doc) => {
-          employees.push({ id: doc.id, ...doc.data() });
-        });
-        employees.sort((a, b) =>
-          a.name.localeCompare(b.name, 'es', { sensitivity: 'base' })
-        );
-        return employees;
+      const employees: any[] = [];
+      querySnapshot.forEach((doc) => {
+        employees.push({ id: doc.id, ...doc.data() });
+      });
+      employees.sort((a, b) =>
+        a.name.localeCompare(b.name, 'es', { sensitivity: 'base' })
+      );
+      return employees;
     } catch (error) {
       console.error('Error al obtener los empleados:', error);
       return [];
@@ -72,6 +81,34 @@ export class EmployeeService {
     } catch (error) {
       this.utilsService.showToast('Error al eliminar el empleado ❌');
       throw error;
+    }
+  }
+
+  async getEmployeeById(employeeId: string) {
+    try {
+      const employeeDocRef = doc(this.firestore, 'employees', employeeId);
+      const employeeSnapshot = await getDoc(employeeDocRef);
+
+      if (!employeeSnapshot.exists()) {
+        console.warn(`Empleado con ID ${employeeId} no encontrado.`);
+        return null;
+      }
+
+      return { id: employeeSnapshot.id, ...employeeSnapshot.data() };
+    } catch (error) {
+      console.error('Error al obtener el empleado:', error);
+      return null;
+    }
+  }
+
+  async updateEmployee(employeeId: string, data: any) {
+    try {
+      const employeeDocRef = doc(this.firestore, 'employees', employeeId);
+      await updateDoc(employeeDocRef, data);
+      return true;
+    } catch (error) {
+      console.error('Error al actualizar el empleado:', error);
+      return false;
     }
   }
 }

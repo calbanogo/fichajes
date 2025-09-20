@@ -64,7 +64,7 @@ export class Tab1Page implements OnInit {
   }
 
   public editEmployee(employee: any) {
-    // Aquí puedes abrir un modal, navegar, mostrar un toast, etc.
+    this.router.navigate(['create-employee', employee.id], { relativeTo: this.route });
   }
 
   public deleteEmployee(employee: any) {
@@ -78,13 +78,11 @@ export class Tab1Page implements OnInit {
         console.error('Error al eliminar el empleado:', error);
         this.utilsService.showToast('Error al eliminar el empleado ❌');
       });
-    // Aquí puedes abrir un modal, navegar, mostrar un toast, etc.
   }
 
 
   async presentEmployeeActions(employee: any) {
     if (Capacitor.getPlatform() === 'web') {
-  // Mostrar un dialog de Angular/Ionic
    const actionSheet = await this.actionSheetController.create({
       header: `${employee.name} ${employee.surname}`,
       buttons: [
