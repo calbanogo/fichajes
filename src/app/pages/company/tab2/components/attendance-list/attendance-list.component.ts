@@ -10,8 +10,7 @@ import {
   IonLabel,
   IonSelect,
   IonPopover,
-  IonDatetime,
-} from '@ionic/angular/standalone';
+  IonDatetime, IonButton } from '@ionic/angular/standalone';
 import { CompanyService } from 'src/app/services/company';
 import { AsistenciaDia } from '../../tab2.page';
 import { DatePipe } from '@angular/common';
@@ -23,7 +22,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './attendance-list.component.html',
   styleUrls: ['./attendance-list.component.scss'],
   standalone: true,
-  imports: [
+  imports: [IonButton, 
     IonDatetime,
     IonPopover,
     IonLabel,

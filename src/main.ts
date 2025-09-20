@@ -9,7 +9,7 @@ import { environment } from './environments/environment';
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { addIcons } from 'ionicons';
-import { add, airplaneOutline, arrowBack, barChartOutline, calendarOutline, checkboxOutline, checkmark, checkmarkCircle, closeOutline, createOutline, ellipsisVertical, logoGoogle, peopleCircleOutline, personCircleOutline, removeOutline, settingsOutline, timeOutline, trashOutline } from 'ionicons/icons';
+import { add, airplaneOutline, arrowBack, barChartOutline, calendarOutline, checkboxOutline, checkmark, checkmarkCircle, chevronDownOutline, closeOutline, createOutline, ellipsisVertical, listOutline, logoGoogle, peopleCircleOutline, personCircleOutline, removeOutline, settingsOutline, timeOutline, trashOutline } from 'ionicons/icons';
 import { setLogLevel, LogLevel } from '@angular/fire';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
@@ -33,7 +33,8 @@ addIcons({
   'remove-outline': removeOutline,
   'checkmark': checkmark,
   'checkbox-outline': checkboxOutline,
-
+  'chevron-down-outline': chevronDownOutline,
+  'list-outline': listOutline
 });
 
 initializeApp(environment.firebase);

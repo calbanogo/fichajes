@@ -56,8 +56,8 @@ ion-col[size="1"] {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 8px 12px;
-  background: #f5f6fa;
+  padding: 0 12px;
+  background: transparent;
   border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
@@ -88,4 +88,26 @@ ion-col[size="1"] {
   justify-content: center;
   align-items: center;
   text-align: center;
+}
+
+.rangoDiasShow {
+  --background: transparent;
+  --color: var(--ion-color-primary);
+  --padding-start: 0;
+  --padding-end: 0;
+  --border-radius: 6px;
+  text-transform: none;
+  font-weight: 600;
+  color: var(--ion-color-primary);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+
+  ion-icon {
+    margin-left: 6px;
+    font-size: 18px;
+    color: var(--ion-color-primary);
+  }
 }

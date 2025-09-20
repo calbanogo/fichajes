@@ -1,15 +1,15 @@
-<ion-header class="ion-no-border">
+<ion-header    class="ion-no-border">
   <app-custom-header [title]="'Empresas'" [subtitle]="'Crea o selecciona una empresa'">
   </app-custom-header>
 </ion-header>
 
-<ion-content color="light">
+<ion-content color="light" >
   @if (noCompanyMessage) {
   <div class="no-company-message">
     <ion-text color="danger">{{ noCompanyMessage }}</ion-text>
   </div>
   } @else {
-  <ion-list color="light">
+  <ion-list color="light" mode="ios">
     @for (item of companyList; track $index) {
     <ion-card class="custom-card" (click)="navigateToCompany(item.companyId)">
       <ion-card-header>

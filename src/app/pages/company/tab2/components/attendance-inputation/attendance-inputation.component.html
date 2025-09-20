@@ -34,6 +34,7 @@
       </div>
 
       <ion-select
+        mode="ios"
         appFocusFix
         formControlName="state"
         interface="popover"
@@ -64,7 +65,7 @@
       [value]="createAsistenciaForm.get('date')?.value"
       (ionChange)="seleccionarFecha($event.detail.value)"
       showDefaultButtons="true"
-      doneText="Confirmar"
+      doneText="Ok"
       cancelText="Cancelar"
       [max]="today"
       [firstDayOfWeek]="1"

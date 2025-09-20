@@ -19,14 +19,15 @@ import {
   IonLabel,
   IonSegment,
   IonSegmentButton,
+  IonRow,
+  IonCol,
 } from '@ionic/angular/standalone';
 
 import { CustomHeaderComponent } from 'src/app/components/custom-header/custom-header.component';
 import { CompanyService } from 'src/app/services/company';
 import { EmployeeService } from 'src/app/services/employee';
-import { UtilsService } from 'src/app/services/utils-service';
-import { AttendanceListComponent } from "./components/attendance-list/attendance-list.component";
-import { AttendanceInputationComponent } from "./components/attendance-inputation/attendance-inputation.component";
+import { AttendanceListComponent } from './components/attendance-list/attendance-list.component';
+import { AttendanceInputationComponent } from './components/attendance-inputation/attendance-inputation.component';
 
 export interface Employee {
   id: string;
@@ -47,6 +48,8 @@ export interface AsistenciaDia {
   templateUrl: 'tab2.page.html',
   styleUrls: ['tab2.page.scss'],
   imports: [
+    IonCol,
+    IonRow,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -60,8 +63,8 @@ export interface AsistenciaDia {
     IonSegment,
     CustomHeaderComponent,
     AttendanceListComponent,
-    AttendanceInputationComponent
-],
+    AttendanceInputationComponent,
+  ],
 })
 export class Tab2Page implements OnInit {
   public companyId!: string;
@@ -77,16 +80,14 @@ export class Tab2Page implements OnInit {
   public scroll: boolean = false;
   public segmentValue: string = 'asistencia';
 
-
   public createAsistenciaForm!: FormGroup;
   public dateForm!: FormGroup;
   public segmentForm!: FormGroup;
 
-
   constructor(
     private fb: FormBuilder,
     private companyService: CompanyService,
-    private employeeService: EmployeeService,
+    private employeeService: EmployeeService
   ) {}
 
   ngOnInit(): void {
@@ -101,5 +102,4 @@ export class Tab2Page implements OnInit {
       this.employees = employees;
     });
   }
-
 }

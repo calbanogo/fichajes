@@ -14,12 +14,12 @@ export const routes: Routes = [
   {
     path: 'welcome',
     loadChildren: () => import('./pages/welcome/welcome.routes').then((m) => m.welcomeRoutes),
-    canActivate: [AuthGuard],
+    // canActivate: [AuthGuard],
   },
   {
     path: 'company',
     loadChildren: () => import('./pages/company/tabs/tabs.routes').then((m) => m.tabRoutes),
-    canActivate: [AuthGuard],
+    // canActivate: [AuthGuard],
   },
   {
     path: 'attendance-detail',

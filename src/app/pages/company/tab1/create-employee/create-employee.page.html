@@ -4,34 +4,67 @@
       <ion-icon name="arrow-back"></ion-icon>
     </ion-button>
   </ion-buttons>
-  <ion-title>  
-    <app-custom-header [little]="true" [title]="'Crear Enmpleado'" >
+  <ion-title>
+    <app-custom-header [little]="true" [title]="'Crear Empleado'">
     </app-custom-header>
   </ion-title>
 </ion-toolbar>
 <ion-content [fullscreen]="true">
-
   <form [formGroup]="createEmployeeForm">
     <ion-list [inset]="true">
-      <ion-item>
-        <ion-input label="Nombre" formControlName="name" type="text" maxlength="14"></ion-input>
+      <ion-item class="centered-item">
+        <ion-input
+          label="Nombre"
+          formControlName="name"
+          type="text"
+          maxlength="14"
+        ></ion-input>
+        @if (createEmployeeForm.get('name')?.touched) { @if
+        (createEmployeeForm.get('name')?.hasError('required')) {
+        <ion-note color="danger">El Nombre es obligatorio.</ion-note>
+        } @if (createEmployeeForm.get('name')?.hasError('minlength')) {
+        <ion-note color="danger">Debe tener al menos 3 caracteres.</ion-note>
+        } }
+      </ion-item>
+
+      <ion-item class="centered-item">
+        <ion-input
+          label="Apellidos"
+          formControlName="surname"
+          type="text"
+          maxlength="30"
+        ></ion-input>
+        @if (createEmployeeForm.get('surname')?.touched) { @if
+        (createEmployeeForm.get('surname')?.hasError('required')) {
+        <ion-note color="danger">El apellido es obligatorio.</ion-note>
+        } @if (createEmployeeForm.get('surname')?.hasError('minlength')) {
+        <ion-note color="danger">Debe tener al menos 3 caracteres.</ion-note>
+        } }
       </ion-item>
 
       <ion-item>
-        <ion-input label="Apellidos" formControlName="surname" type="text" maxlength="30"></ion-input>       
+        <ion-input
+          label="Email"
+          formControlName="email"
+          type="email"
+        ></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-input label="Email" formControlName="email" type="email"></ion-input>       
-      </ion-item>
-
-      <ion-item>
-        <ion-input label="Teléfono" formControlName="phone" type="phone" maxlength="9"></ion-input>       
+        <ion-input
+          label="Teléfono"
+          formControlName="phone"
+          type="phone"
+          maxlength="9"
+        ></ion-input>
       </ion-item>
     </ion-list>
-
   </form>
 </ion-content>
 
-<app-custom-footer-button [disabled]="createEmployeeForm.invalid" [buttonText]="'Guardar'" (actionClick)="onSubmit()">
+<app-custom-footer-button
+  [disabled]="createEmployeeForm.invalid"
+  [buttonText]="'Guardar'"
+  (actionClick)="onSubmit()"
+>
 </app-custom-footer-button>

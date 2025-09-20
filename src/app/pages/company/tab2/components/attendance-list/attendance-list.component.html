@@ -1,8 +1,9 @@
 <ion-grid fixed>
   <ion-row>
-    <ion-col size="5">
+    <ion-col size="4">
       <div class="select-solo">
         <ion-select
+          mode="ios"
           appFocusFix
           [(ngModel)]="rangoDias"
           [ngModelOptions]="{ standalone: true }"
@@ -16,14 +17,16 @@
         </ion-select>
       </div>
     </ion-col>
-    <ion-col size="7">
-      <ion-text
+    <ion-col size="8">
+      <ion-button
+        fill="clear"
+        size="small"
         class="rangoDiasShow"
-        color="primary"
         (click)="abrirPopoverDays($event)"
       >
-        <strong>{{ rangoDiasShow }}</strong>
-      </ion-text>
+        {{ rangoDiasShow }}
+        <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
+      </ion-button>
     </ion-col>
   </ion-row>
 </ion-grid>
@@ -76,6 +79,7 @@
   [isOpen]="mostrarPopoverDays"
   [event]="eventoPopoverDays"
   (didDismiss)="cerrarPopoverDays()"
+
 >
   <ng-template>
     <ion-datetime
@@ -83,7 +87,7 @@
       [value]="selectDayValue"
       (ionChange)="selectDay($event.detail.value)"
       showDefaultButtons="true"
-      doneText="Confirmar"
+      doneText="Ok"
       cancelText="Cancelar"
       [max]="today"
       [firstDayOfWeek]="1"
