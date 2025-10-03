@@ -159,12 +159,12 @@ export class CreateCompanyPage implements OnInit {
         this.createCompanyForm.patchValue(company);
         this.hoursForm.patchValue({ days: company.days || [] });
       } else {
-        await this.utilsService.showToast('Empresa no encontrado ❌', 'error');
+        await this.utilsService.showToast('Empresa no encontrado ❌', 'warning');
       }
     } catch (error) {
       await this.utilsService.showToast(
         'Error al cargar el empleado ❌',
-        'error'
+        'warning'
       );
     }
   }

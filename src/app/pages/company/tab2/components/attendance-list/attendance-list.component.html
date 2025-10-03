@@ -30,6 +30,19 @@
     </ion-col>
   </ion-row>
 </ion-grid>
+
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-button
+      (click)="createExcel()"
+      expand="block"
+      fill="clear"
+      shape="round"
+    >
+     Exportar a Excel
+    </ion-button>
+  </ion-toolbar> 
+</ion-header>
 <div class="scroll-x-container">
   <ion-grid class="asistencia-grid">
     <ion-row class="header-row">
@@ -74,12 +87,12 @@
   </ion-grid>
 </div>
 
-<!-- Popover calendario Selector de dia en el listado -->
+
+ <!-- Popover calendario Selector de dia en el listado -->
 <ion-popover
   [isOpen]="mostrarPopoverDays"
   [event]="eventoPopoverDays"
   (didDismiss)="cerrarPopoverDays()"
-
 >
   <ng-template>
     <ion-datetime

@@ -10,7 +10,11 @@ import {
   IonLabel,
   IonSelect,
   IonPopover,
-  IonDatetime, IonButton } from '@ionic/angular/standalone';
+  IonDatetime,
+  IonButton,
+  IonToolbar,
+  IonHeader,
+} from '@ionic/angular/standalone';
 import { CompanyService } from 'src/app/services/company';
 import { AsistenciaDia } from '../../tab2.page';
 import { DatePipe } from '@angular/common';
@@ -24,7 +28,10 @@ import { UtilsService } from 'src/app/services/utils-service';
   templateUrl: './attendance-list.component.html',
   styleUrls: ['./attendance-list.component.scss'],
   standalone: true,
-  imports: [IonButton, 
+  imports: [
+    IonHeader,
+    IonToolbar,
+    IonButton,
     IonDatetime,
     IonPopover,
     IonLabel,
@@ -235,48 +242,67 @@ export class AttendanceListComponent implements OnInit {
     this.mostrarPopoverDays = false;
   }
 
-private procesarAsistencias(attendance: AsistenciaDia[]): void {
-  const diasConDatos = new Set<string>();
-  const mapaEmpleados = new Map<string, any>();
+  private procesarAsistencias(attendance: AsistenciaDia[]): void {
+    const diasConDatos = new Set<string>();
+    const mapaEmpleados = new Map<string, any>();
 
-  const empleadosMap = new Map(this.actualEmployees.map(e => [e.id, e]));
+    const empleadosMap = new Map(this.actualEmployees.map((e) => [e.id, e]));
 
-  for (const dia of attendance) {
-    const fecha = dia.date;
+    for (const dia of attendance) {
+      const fecha = dia.date;
 
-    for (const emp of dia.employees) {
-      if (emp.state) diasConDatos.add(fecha);
+      for (const emp of dia.employees) {
+        if (emp.state) diasConDatos.add(fecha);
 
-      if (!mapaEmpleados.has(emp.id)) {
-        const actual = empleadosMap.get(emp.id);
+        if (!mapaEmpleados.has(emp.id)) {
+          const actual = empleadosMap.get(emp.id);
 
-        mapaEmpleados.set(emp.id, {
-          id: emp.id,
-          name: actual
-            ? `${actual.name} ${actual.surname}`
-            : `${emp.name} ${emp.surname}`,
-          asistencias: {},
-          isDeleted: !actual // opcional: marcar si fue eliminado
-        });
+          mapaEmpleados.set(emp.id, {
+            id: emp.id,
+            name: actual
+              ? `${actual.name} ${actual.surname}`
+              : `${emp.name} ${emp.surname}`,
+            asistencias: {},
+            isDeleted: !actual, // opcional: marcar si fue eliminado
+          });
+        }
+
+        mapaEmpleados.get(emp.id).asistencias[fecha] = emp.state;
       }
+    }
 
-      mapaEmpleados.get(emp.id).asistencias[fecha] = emp.state;
+    this.diasMes = Array.from(diasConDatos).sort();
+    this.empleados = Array.from(mapaEmpleados.values());
+    console.log(this.empleados);
+  }
+
+  private async loadEmployees() {
+    const companyId = this.companyService.getSelectedCompany()?.companyId;
+    if (!companyId) return;
+
+    try {
+      const employees = await this.employeeService.getEmployees(companyId);
+      this.actualEmployees = employees;
+    } catch (error) {
+      await this.utilsService.showToast('Error al cargar empleados ❌', 'warning');
     }
   }
 
-  this.diasMes = Array.from(diasConDatos).sort();
-  this.empleados = Array.from(mapaEmpleados.values());
-}
-
-  private async loadEmployees() {
-  const companyId = this.companyService.getSelectedCompany()?.companyId;
-  if (!companyId) return;
-
-  try {
-    const employees = await this.employeeService.getEmployees(companyId);
-    this.actualEmployees = employees;
-  } catch (error) {
-    await this.utilsService.showToast('Error al cargar empleados ❌');
+  async createExcel() {
+    const companyData = await this.companyService.getCompanyById(
+      this.companyId
+    );
+    console.log(companyData);
+    if(!this.empleados || this.empleados.length === 0) {
+      await this.utilsService.showToast('No hay registros para exportar ❌', 'warning');
+      return;
+    }
+    const hours = companyData?.efectiveHours ?? 8;
+    console.log(companyData);
+    this.utilsService.exportarAsistencias(
+      this.empleados,
+      +hours,
+      'asistencias.xlsx'
+    );
   }
-}
 }
