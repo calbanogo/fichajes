@@ -49,5 +49,10 @@ export const tabRoutes: Routes = [
     path: 'tab2/attendance-detail',
     loadComponent: () =>
       import('../tab2/components/attendance-list/attendance-detail/attendance-detail.page').then(m => m.AttendanceDetailPage),
+  },
+  {
+    path: 'tab3/update-company/:id',
+    loadComponent: () =>
+      import('../../welcome/create-company/create-company.page').then(m => m.CreateCompanyPage),
   }
 ];

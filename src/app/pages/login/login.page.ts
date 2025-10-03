@@ -26,8 +26,7 @@ export class LoginPage {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router,
-    private utilsService: UtilsService
+    private router: Router
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],

@@ -1,26 +1,27 @@
-import { EnvironmentInjector, inject, Injectable, runInInjectionContext } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
+import {
+  EnvironmentInjector,
+  inject,
+  Injectable,
+  runInInjectionContext,
+} from '@angular/core';
+import {
+  Auth,
+  createUserWithEmailAndPassword,
+  signOut,
+} from '@angular/fire/auth';
 import { doc, Firestore, getDoc, setDoc } from '@angular/fire/firestore';
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
-
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  constructor(
+    private auth: Auth,
+    private firestore: Firestore,
+    private injector: EnvironmentInjector
+  ) {}
 
-  constructor(private auth: Auth, private firestore: Firestore, private injector: EnvironmentInjector) {}
-
-  // Registro de usuario
-  async register(email: string, password: string) {
-    try {
-      const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
-      return userCredential.user;
-    } catch (error) {
-      console.error('Error al registrar usuario:', error);
-      throw error;
-    }
-  }
   // Inicio de sesión con Google
   async loginWithGoogle() {
     try {
@@ -51,7 +52,7 @@ export class AuthService {
   // Cerrar sesión
   async logout() {
     try {
-      await signOut(this.auth);
+      await FirebaseAuthentication.signOut();
       localStorage.removeItem('isLoggedIn');
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
@@ -59,20 +60,21 @@ export class AuthService {
     }
   }
 
+  // Obtner datos del usuario en Firebase
   async getUserData(uid: string) {
-  try {
-     const userRef = doc(this.firestore, 'users', uid);
-    const userSnapshot = await getDoc(userRef);
+    try {
+      const userRef = doc(this.firestore, 'users', uid);
+      const userSnapshot = await getDoc(userRef);
 
-    if (userSnapshot.exists()) {
-      return userSnapshot.data();
-    } else {
-      console.error('No se encontraron datos para el usuario');
-      return null;
+      if (userSnapshot.exists()) {
+        return userSnapshot.data();
+      } else {
+        console.error('No se encontraron datos para el usuario');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error al obtener los datos del usuario:', error);
+      throw error;
     }
-  } catch (error) {
-    console.error('Error al obtener los datos del usuario:', error);
-    throw error;
   }
-}
 }

@@ -55,7 +55,7 @@ export class CompanyService {
   async addCompany(company: Company, userId: string) {
     try {
       const docRef = await addDoc(this.companyCollection, company);
-
+      
       const userRef = doc(this.firestore, `users/${userId}`);
       await updateDoc(userRef, { 
         companies:  arrayUnion(
@@ -107,5 +107,32 @@ export class CompanyService {
           attendance.push({ id: doc.id, ...doc.data() });
         });
         return attendance;
+  }
+
+  async getCompanyById(companyId: string): Promise<Company | null> {
+    try {
+      const companyDocRef = doc(this.firestore, 'companies', companyId);
+      const companySnapshot = await getDoc(companyDocRef);
+
+      if (!companySnapshot.exists()) {
+        console.warn(`Empleado con ID ${companyId} no encontrado.`);
+        return null;
+      }
+      console.log('Company data:', companySnapshot.data());
+      return companySnapshot.data() as Company ;
+    } catch (error) {
+      console.error('Error al obtener el empleado:', error);
+      return null;
+    }
+  }
+
+  async updateCompany(companyId: string, updatedData: Partial<Company>) {
+    try {
+      const companyDocRef = doc(this.firestore, 'companies', companyId);
+      await updateDoc(companyDocRef, updatedData);
+      this.utilsService.showToast('Empresa actualizada con éxito ✅');
+    } catch (error) {
+      this.utilsService.showToast('Error al actualizar la empresa ❌');
+    }
   }
 }

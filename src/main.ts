@@ -9,9 +9,10 @@ import { environment } from './environments/environment';
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { addIcons } from 'ionicons';
-import { add, airplaneOutline, arrowBack, barChartOutline, calendarOutline, checkboxOutline, checkmark, checkmarkCircle, chevronDownOutline, closeOutline, createOutline, ellipsisVertical, listOutline, logoGoogle, peopleCircleOutline, personCircleOutline, removeOutline, settingsOutline, timeOutline, trashOutline } from 'ionicons/icons';
+import { add, airplaneOutline, arrowBack, barChartOutline, calendarOutline, checkboxOutline, checkmark, checkmarkCircle, chevronDownOutline, closeOutline, createOutline, ellipsisVertical, hourglassOutline, listOutline, logoGoogle, logOutOutline, peopleCircleOutline, personCircleOutline, removeOutline, settingsOutline, timeOutline, trashOutline } from 'ionicons/icons';
 import { setLogLevel, LogLevel } from '@angular/fire';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
 setLogLevel(LogLevel.SILENT);
 
@@ -34,7 +35,9 @@ addIcons({
   'checkmark': checkmark,
   'checkbox-outline': checkboxOutline,
   'chevron-down-outline': chevronDownOutline,
-  'list-outline': listOutline
+  'list-outline': listOutline,
+  'hourglass-outline': hourglassOutline,
+  'log-out-outline': logOutOutline
 });
 
 initializeApp(environment.firebase);
@@ -50,6 +53,7 @@ bootstrapApplication(AppComponent, {
     provideFirestore(() => getFirestore()),
     provideAuth(() => getAuth()),
     provideCharts(withDefaultRegisterables()),
+    provideNoopAnimations(),
     {
     provide: Storage,
     useFactory: () => new Storage(),

@@ -14,14 +14,14 @@ export class UtilsService {
     private loadingController: LoadingController
   ) {}
 
-  public async showToast(message: string) {
+  public async showToast(message: string, type: 'success' | 'error' = 'success') {
     if(Capacitor.getPlatform() === 'web') {
       const toast = await this.toastController.create({
         message,
         duration: 2000,
         position: 'bottom',
         positionAnchor: 'bottom',
-        color: 'success'
+        color: type
       });
       await toast.present();
     } else {

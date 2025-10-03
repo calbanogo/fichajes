@@ -5,7 +5,10 @@
     </ion-button>
   </ion-buttons>
   <ion-title>
-    <app-custom-header [little]="true" [title]="employeeId ? 'Editar Empleado' : 'Crear Empleado'">
+    <app-custom-header
+      [little]="true"
+      [title]="employeeId ? 'Editar Empleado' : 'Crear Empleado'"
+    >
     </app-custom-header>
   </ion-title>
 </ion-toolbar>
@@ -42,7 +45,7 @@
         } }
       </ion-item>
 
-      <ion-item>
+      <ion-item class="centered-item">
         <ion-input
           label="Email"
           formControlName="email"
@@ -50,7 +53,7 @@
         ></ion-input>
       </ion-item>
 
-      <ion-item>
+      <ion-item class="centered-item">
         <ion-input
           label="Teléfono"
           formControlName="phone"

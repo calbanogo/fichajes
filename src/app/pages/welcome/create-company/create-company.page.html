@@ -1,25 +1,45 @@
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/welcome"></ion-back-button>
-    </ion-buttons>
-    <ion-title>
-      <app-custom-header [little]="true" [title]="'Crear Empresa'">
-      </app-custom-header>
-    </ion-title>
-
-  </ion-toolbar>
+<ion-toolbar>
+  <ion-buttons slot="start">
+    <ion-back-button defaultHref="/welcome"></ion-back-button>
+  </ion-buttons>
+  <ion-title>
+    <app-custom-header [little]="true" [title]="'Crear Empresa'">
+    </app-custom-header>
+  </ion-title>
+</ion-toolbar>
 
 <ion-content [fullscreen]="true" color="light">
-
-  <form [formGroup]="createCompanyForm" >
+  <form [formGroup]="createCompanyForm">
     <ion-list [inset]="true">
       <ion-item>
-        <!-- <ion-label position="floating">Nombre de la Empresa</ion-label> -->
-        <ion-input label="Nombre" formControlName="companyName" type="text"></ion-input>
+        <ion-input
+          label="Nombre"
+          formControlName="companyName"
+          type="text"
+        ></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-textarea label="Comentario" labelPlacement="floating" rows="2" formControlName="description"></ion-textarea>
+        <ion-textarea
+          label="Comentario"
+          labelPlacement="floating"
+          rows="2"
+          formControlName="description"
+        ></ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-input
+          label="Horas efectivas"
+          formControlName="efectiveHours"
+          type="number"
+          inputmode="decimal"
+          step="any"
+        ></ion-input>
+        @if (createCompanyForm.get('efectiveHours')?.touched) { @if
+        (createCompanyForm.get('efectiveHours')?.hasError('pattern')) {
+        <ion-note color="danger"> Máximo 2 decimales (ej: 123.45) </ion-note>
+        } }
       </ion-item>
     </ion-list>
   </form>
@@ -27,34 +47,39 @@
     <ion-list>
       <div formArrayName="days">
         @for (grupo of days.controls; track $index; let i = $index) {
-          <div [formGroup]="getGrupo(i)">
-            <ion-item lines="full" class="horario-item">
-              <div class="horario-grid"></div>
-                <ion-label class="dia-label">{{ getGrupo(i).value.name }}</ion-label>
-                <input
-                  formControlName="hourInit"
-                  [ngxTimepicker]="InicioPicker"
-                  readonly
-                  class="time-input"
-                />
-                <ngx-material-timepicker #InicioPicker></ngx-material-timepicker>
-                <input
-                  formControlName="hourFinish"
-                  [ngxTimepicker]="finPicker"
-                  readonly
-                  class="time-input"
-                />
-                <ngx-material-timepicker #finPicker></ngx-material-timepicker>
+        <div [formGroup]="getGrupo(i)">
+          <ion-item lines="full" class="horario-item">
+            <div class="horario-grid"></div>
+            <ion-label class="dia-label"
+              >{{ getGrupo(i).value.name }}</ion-label
+            >
+            <input
+              formControlName="hourInit"
+              [ngxTimepicker]="InicioPicker"
+              readonly
+              class="time-input"
+            />
+            <ngx-material-timepicker #InicioPicker></ngx-material-timepicker>
+            <input
+              formControlName="hourFinish"
+              [ngxTimepicker]="finPicker"
+              readonly
+              class="time-input"
+            />
+            <ngx-material-timepicker #finPicker></ngx-material-timepicker>
 
-                <ion-toggle formControlName="active"></ion-toggle>
-              </ion-item>
-          </div>
+            <ion-toggle formControlName="active"></ion-toggle>
+          </ion-item>
+        </div>
         }
       </div>
     </ion-list>
-</form>
+  </form>
 </ion-content>
 
-<app-custom-footer-button [disabled]="createCompanyForm.invalid" [buttonText]="'Guardar'" (actionClick)="onSubmit()">
+<app-custom-footer-button
+  [disabled]="createCompanyForm.invalid"
+  [buttonText]="'Guardar'"
+  (actionClick)="onSubmit()"
+>
 </app-custom-footer-button>
-

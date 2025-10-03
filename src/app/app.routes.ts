@@ -20,9 +20,5 @@ export const routes: Routes = [
     path: 'company',
     loadChildren: () => import('./pages/company/tabs/tabs.routes').then((m) => m.tabRoutes),
     // canActivate: [AuthGuard],
-  },
-  {
-    path: 'attendance-detail',
-    loadComponent: () => import('./pages/company/tab2/components/attendance-list/attendance-detail/attendance-detail.page').then( m => m.AttendanceDetailPage)
   }
 ];
