@@ -5,6 +5,8 @@ import { SplashScreen } from '@capacitor/splash-screen';
 import { Toast } from '@capacitor/toast';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
+import { Filesystem, Directory } from '@capacitor/filesystem';
+import { Share } from '@capacitor/share';
 
 export interface Trabajador {
   id: string;
@@ -83,13 +85,13 @@ export class UtilsService {
   private getAutoDateRange(data: Trabajador[]): string[] {
     // Obtener todas las fechas
     const fechas: string[] = [];
-    data.forEach(t => fechas.push(...Object.keys(t.asistencias)));
+    data.forEach((t) => fechas.push(...Object.keys(t.asistencias)));
 
     if (fechas.length === 0) return [];
 
     // Encontrar la fecha mínima y máxima
-    const minDate = fechas.reduce((a, b) => a < b ? a : b);
-    const maxDate = fechas.reduce((a, b) => a > b ? a : b);
+    const minDate = fechas.reduce((a, b) => (a < b ? a : b));
+    const maxDate = fechas.reduce((a, b) => (a > b ? a : b));
 
     // Generar todas las fechas entre minDate y maxDate
     const allDates: string[] = [];
@@ -105,59 +107,159 @@ export class UtilsService {
     return allDates;
   }
 
- public exportarAsistencias(
+  public async exportarAsistencias(
     data: Trabajador[],
     hoursPerDay: number,
     nombreArchivo: string = 'asistencias.xlsx'
   ) {
-    // Todas las fechas automáticamente
-    const allDates = this.getAutoDateRange(data);
+    if (Capacitor.getPlatform() === 'web') {
+      const allDates = this.getAutoDateRange(data);
 
-    // Formatear MM-DD
-    const formattedDates = allDates.map(d => {
-      const parts = d.split('-');
-      return parts.length >= 3 ? `${parts[2]}-${parts[1]}` : d;
-    });
-
-    // Cabecera
-    const header: string[] = ['Trabajador', ...formattedDates, 'Horas Totales', '% Asistencia'];
-
-    // Construir filas
-    const rows = data.map(t => {
-      const row: Record<string, string | number> = {};
-      header.forEach(col => row[col] = '');
-
-      row['Trabajador'] = t.name;
-
-      let horasTotales = 0;
-
-      allDates.forEach((date, idx) => {
-        const estado = t.asistencias[date] ?? '';
-        row[formattedDates[idx]] = estado;
-
-        const peso = this.defaultWeights[estado?.toLowerCase()] ?? 0;
-        horasTotales += peso * hoursPerDay;
+      // Formatear MM-DD
+      const formattedDates = allDates.map((d) => {
+        const parts = d.split('-');
+        return parts.length >= 3 ? `${parts[2]}-${parts[1]}` : d;
       });
 
-      const totalPosibleHoras = allDates.length * hoursPerDay;
-      const porcentaje = totalPosibleHoras > 0 ? (horasTotales / totalPosibleHoras) * 100 : 0;
+      // Cabecera
+      const header: string[] = [
+        'Trabajador',
+        ...formattedDates,
+        'Horas Totales',
+        '% Asistencia',
+      ];
 
-      row['Horas Totales'] = Number(horasTotales.toFixed(2));
-      row['% Asistencia'] = porcentaje.toFixed(2) + '%';
+      // Construir filas
+      const rows = data.map((t) => {
+        const row: Record<string, string | number> = {};
+        header.forEach((col) => (row[col] = ''));
 
-      return row;
+        row['Trabajador'] = t.name;
+
+        let horasTotales = 0;
+
+        allDates.forEach((date, idx) => {
+          const estado = t.asistencias[date] ?? '';
+          row[formattedDates[idx]] = estado;
+
+          const peso = this.defaultWeights[estado?.toLowerCase()] ?? 0;
+          horasTotales += peso * hoursPerDay;
+        });
+
+        const totalPosibleHoras = allDates.length * hoursPerDay;
+        const porcentaje =
+          totalPosibleHoras > 0 ? (horasTotales / totalPosibleHoras) * 100 : 0;
+
+        row['Horas Totales'] = Number(horasTotales.toFixed(2));
+        row['% Asistencia'] = porcentaje.toFixed(2) + '%';
+
+        return row;
+      });
+
+      // Crear worksheet y workbook
+      const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(rows, {
+        header,
+        skipHeader: false,
+      });
+      const workbook: XLSX.WorkBook = {
+        Sheets: { Asistencias: worksheet },
+        SheetNames: ['Asistencias'],
+      };
+
+      // Guardar Excel
+      const excelBuffer: any = XLSX.write(workbook, {
+        bookType: 'xlsx',
+        type: 'array',
+      });
+      const blob: Blob = new Blob([excelBuffer], {
+        type: 'application/octet-stream',
+      });
+      FileSaver.saveAs(blob, nombreArchivo);
+    } else {
+      const allDates = this.getAutoDateRange(data);
+
+      const formattedDates = allDates.map((d) => {
+        const parts = d.split('-');
+        return parts.length >= 3 ? `${parts[2]}-${parts[1]}` : d;
+      });
+
+      const header: string[] = [
+        'Trabajador',
+        ...formattedDates,
+        'Horas Totales',
+        '% Asistencia',
+      ];
+
+      const rows = data.map((t) => {
+        const row: Record<string, string | number> = {};
+        header.forEach((col) => (row[col] = ''));
+
+        row['Trabajador'] = t.name;
+
+        let horasTotales = 0;
+
+        allDates.forEach((date, idx) => {
+          const estado = t.asistencias[date] ?? '';
+          row[formattedDates[idx]] = estado;
+
+          const peso = this.defaultWeights[estado?.toLowerCase()] ?? 0;
+          horasTotales += peso * hoursPerDay;
+        });
+
+        const totalPosibleHoras = allDates.length * hoursPerDay;
+        const porcentaje =
+          totalPosibleHoras > 0 ? (horasTotales / totalPosibleHoras) * 100 : 0;
+
+        row['Horas Totales'] = Number(horasTotales.toFixed(2));
+        row['% Asistencia'] = porcentaje.toFixed(2) + '%';
+
+        return row;
+      });
+
+      const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(rows, {
+        header,
+        skipHeader: false,
+      });
+      const workbook: XLSX.WorkBook = {
+        Sheets: { Asistencias: worksheet },
+        SheetNames: ['Asistencias'],
+      };
+
+      const excelBuffer: any = XLSX.write(workbook, {
+        bookType: 'xlsx',
+        type: 'array',
+      });
+      const blob: Blob = new Blob([excelBuffer], {
+        type: 'application/octet-stream',
+      });
+
+      // Convertir a base64
+      const base64Data = (await this.blobToBase64(blob)) as string;
+      const base64Clean = base64Data.split(',')[1]; // eliminar prefijo data:application/octet-stream;base64,
+
+      // Guardar en directorio público (Android) o documentos (iOS)
+      const savedFile = await Filesystem.writeFile({
+        path: nombreArchivo,
+        data: base64Clean,
+        directory: Directory.External, // Android: carpeta pública
+      });
+
+      // Abrir / compartir el archivo automáticamente
+      await Share.share({
+        title: 'Asistencias',
+        text: 'Aquí tienes el archivo Excel de asistencias',
+        url: 'file://' + savedFile.uri,
+        dialogTitle: 'Compartir archivo',
+      });
+    }
+  }
+
+  private blobToBase64(blob: Blob): Promise<string | ArrayBuffer | null> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
     });
-
-    // Crear worksheet y workbook
-    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(rows, { header, skipHeader: false });
-    const workbook: XLSX.WorkBook = {
-      Sheets: { 'Asistencias': worksheet },
-      SheetNames: ['Asistencias']
-    };
-
-    // Guardar Excel
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-    FileSaver.saveAs(blob, nombreArchivo);
   }
 }
